@@ -83,10 +83,10 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(rec => rec.meta.requiresAuth)) {
 
     // check Auth state of user
-    // let user = firebase.auth().currentUser
+    let user = firebase.auth().currentUser
 
     // offline testing uncomment below and comment above
-    let user = true
+    // let user = true
 
     if (user) {
       // user is signed in, proceed
