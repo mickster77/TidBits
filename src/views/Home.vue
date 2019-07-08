@@ -76,21 +76,20 @@
     </v-container>
     <v-container align-center fluid>
       <h1>All Requests</h1>
-
       <template>
         <v-card>
           <v-card-title>
             <v-btn-toggle v-model="showRequests">
-              <v-btn flat value="all">
+              <v-btn flat @click="allPressed" value="all">
                 <span>All</span>
               </v-btn>
-              <v-btn flat value="new">
+              <v-btn flat @click="filterRequests('new')" value="new">
                 <span>New</span>
               </v-btn>
-              <v-btn flat value="ongoing">
+              <v-btn flat @click="filterRequests('ongoing')" value="ongoing">
                 <span>Ongoing</span>
               </v-btn>
-              <v-btn flat value="completed">
+              <v-btn flat @click="filterRequests('completed')" value="completed">
                 <span>Completed</span>
               </v-btn>
             </v-btn-toggle>
@@ -105,7 +104,12 @@
             ></v-text-field>
           </v-card-title>
 
-          <v-data-table :headers="headers" :items="visibleRequests" :search="search">
+          <v-data-table
+            :headers="headers"
+            :items="visibleRequests"
+            :search="search"
+            :rows-per-page-items="[10,25,{'text':'$vuetify.dataIterator.rowsPerPageAll','value':-1}]"
+          >
             <!-- Data table -->
 
             <template v-slot:items="props">
@@ -113,7 +117,7 @@
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.dateSubmitted }}</td>
                 <td>{{ props.item.departDate }}</td>
-                <td>{{ props.item.location }}</td>
+                <td>{{ props.item.placeVisited }}</td>
                 <td>
                   <v-chip small :class="`${props.item.status} caption my-2`">{{ props.item.status }}</v-chip>
                 </td>
@@ -154,17 +158,11 @@
                     router
                     :to="{name: 'ManageRequest', params: {request_id: props.item.id}}"
                   >Manage</v-btn>
-                  <!-- <v-btn
-                    flat
-                    v-show="isAdmin"
-                    router
-                    :to="{name: 'ManageRequest', params: {request_id: request.id}}"
-                  >Manage</v-btn>-->
 
                   <!-- Delete button in dropdown-->
                   <v-dialog v-model="dialog" width="500">
                     <template v-slot:activator="{ on }">
-                      <v-btn flat class="red--text" v-on="on" v-show="isAdmin">Delete Request</v-btn>
+                      <v-btn flat class="red--text" v-on="on" v-show="false">Delete Request</v-btn>
                     </template>
 
                     <v-card>
@@ -202,72 +200,36 @@ export default {
   data() {
     return {
       // for detele dialog
-
       dialog: false,
-
       // For populating data table
       showRequests: "all",
-
       // for expanding row
       expand: false,
-
       // for seach bar
       search: "",
-
-      // all requests
+      // requests
       requests: [],
       // for data table
       headers: [
         { text: "Name", align: "left", value: "name" },
         { text: "Date Submited", value: "dateSubmitted" },
         { text: "Departing Date", value: "departDate" },
-        { text: "Location", value: "location" },
+        { text: "Destination", value: "placeVisited" },
         { text: "Status", value: "status" }
       ]
     };
   },
   created() {
-    db.collection("newRequests")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          let request = doc.data();
-          request.id = doc.id;
-          // each request is pushed in the the requests array
-          this.requests.push(request);
-          // console.log(request.id);
-        });
-      });
+    this.$store.dispatch("updateRequests");
   },
 
   computed: {
     visibleRequests: function() {
-      /* This funciton detemines which requests should be shown
-      in the data table based on the status of each request along
-      with the state of the button group (all, new, ongoing, completed) */
-      // console.log(this.showRequests);
-      // this.showRequests is the state of the button in the data table
-      let currentState = this.showRequests;
-
-      return this.requests.filter(function(request) {
-        if (request.status == currentState) {
-          return true;
-        }
-        if (currentState == "all") {
-          return true;
-        } else {
-          return false;
-        }
-      });
+      return this.$store.state.visibleRequests;
+      // return this.$store.getters.visibleRequests2;
     },
     newRequests: function() {
-      return this.requests.filter(function(request) {
-        if (request.status == "new") {
-          return true;
-        } else {
-          return false;
-        }
-      });
+      return this.$store.getters.newRequests;
     },
     isAdmin: function() {
       let isMike = firebase.auth().currentUser.email == "shit.mail@icloud.com";
@@ -305,8 +267,14 @@ export default {
   },
 
   methods: {
-    btnPressed() {
-      // console.log(this.visibleRequests);
+    allPressed() {
+      this.$store.commit("showAll");
+      this.$store.commit("showRequests2", "all");
+      this.showRequests = "all";
+    },
+    filterRequests(filter) {
+      this.$store.commit("showRequests", filter);
+      this.$store.commit("showRequests2", filter);
     },
 
     deleteRequest(id) {
@@ -314,14 +282,6 @@ export default {
         .doc(id) // Gets the doc of a specific id
         .delete() // This deletes it from the database
         .then(() => {
-          // delete the smoothie from the array to update page
-          this.requests = this.requests.filter(request => {
-            if (request.id == id) {
-              return false;
-            } else {
-              return true;
-            }
-          });
           this.dialog = false;
         });
     },
