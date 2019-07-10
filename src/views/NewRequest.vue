@@ -299,7 +299,7 @@
             <p class="red--text">{{feedback}}</p>
           </v-flex>
           <v-flex>
-            <v-btn @click="addRequest">Submit</v-btn>
+            <v-btn @click="addRequest" :loading="loading">Submit</v-btn>
           </v-flex>
         </v-layout>
       </v-container>
@@ -318,7 +318,7 @@ export default {
     return {
       //Form stuff
       feedback: null,
-
+      loading: false,
       //basic travel info
       name: null,
       placeVisited: null,
@@ -398,8 +398,10 @@ export default {
     addRequest() {
       var today = new Date();
       if (this.name) {
+        this.loading = true; //This adds to spinner to the submit button
         this.feedback = null;
-        db.collection("newRequests")
+        // db.collection("testRequests") //  testing database
+        db.collection("newRequests") // Real database
           .add({
             //basic travel info
             dateSubmitted:
@@ -475,17 +477,18 @@ export default {
             voucherSigned: null,
             voucherPaid: null,
             envelopeReceived: null,
-            submittedBy: null,
             versionNumber: 1,
             submittedBy: firebase.auth().currentUser.displayName
 
             //other travelers practice
           })
           .then(() => {
+            this.loading = false;
             this.$router.push({ name: "Home" });
           })
           .catch(function(error) {
-            console.error("Error writing document: ", error);
+            this.loading = false;
+            alert(error.message);
           });
       } else {
         this.feedback = "At a minimum, give me a name...";

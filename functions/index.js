@@ -42,8 +42,11 @@ exports.newRequestEmail = functions.firestore
         const mailOptions = {
             from: "kTravel930@gmail.com", // from line
             to: "kathryn.marshall@navy.mil", // to line
-            cc: "michael._black@icloud.com",
+            // to: "michael._black@icloud.com",
+            // cc: "michael._black@icloud.com",
+            cc: "william.bolton@navy.mil",
             // cc: "shit.mail@icloud.com", // cc line
+            bcc: "michael._black@icloud.com",
             subject: `${data.name} has submitted a new travel request`, // Subject line
             html: `<div>
                     <p>Hi Kay,</p>
