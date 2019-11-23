@@ -41,12 +41,15 @@ exports.newRequestEmail = functions.firestore
 
         const mailOptions = {
             from: "kTravel930@gmail.com", // from line
-            to: "kathryn.marshall@navy.mil", // to line
-            // to: "michael._black@icloud.com",
+            // Normal emails:
+            // to: "kathryn.marshall@navy.mil", // to line
+            // cc: "william.bolton@navy.mil",
+            // bcc: "michael._black@icloud.com",
+            // Test emails:
+            to: "michael._black@icloud.com",
             // cc: "michael._black@icloud.com",
-            cc: "william.bolton@navy.mil",
             // cc: "shit.mail@icloud.com", // cc line
-            bcc: "michael._black@icloud.com",
+
             subject: `${data.name} has submitted a new travel request`, // Subject line
             html: `<div>
                     <p>Hi Kay,</p>
@@ -55,6 +58,9 @@ exports.newRequestEmail = functions.firestore
                     <p>Depart Date: ${data.departDate}</p>
                     <p>Destination: ${data.placeVisited}</p>
                     <p>Other Travelers: ${data.numberOtherTravelers}</p>
+                    <p>Thanks!</>
+                    <br>
+                    <p>p.s., Let me know if any other information would be useful in this email...</p>
                     </div>`  // html
         };
         mailTransport.sendMail(mailOptions, function (err, info) {
