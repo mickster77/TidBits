@@ -42,11 +42,11 @@ exports.newRequestEmail = functions.firestore
         const mailOptions = {
             from: "kTravel930@gmail.com", // from line
             // Normal emails:
-            // to: "kathryn.marshall@navy.mil", // to line
-            // cc: "william.bolton@navy.mil",
-            // bcc: "michael._black@icloud.com",
+            to: "kathryn.marshall@navy.mil", // to line
+            cc: "william.bolton@navy.mil",
+            bcc: "michael._black@icloud.com",
             // Test emails:
-            to: "michael._black@icloud.com",
+            // to: "michael._black@icloud.com",
             // cc: "michael._black@icloud.com",
             // cc: "shit.mail@icloud.com", // cc line
 
