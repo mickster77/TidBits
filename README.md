@@ -48,9 +48,11 @@ v 1.05 (released)
 -add cloud function to send email when a new request is added
 --hide delete button from dropdown since table does not update
 
-v 1.06 (not released)
+v 1.06 (released)
 --added loading spinner to submit button
 --added william to email and me to bcc line
+-fixed departing timeframe bug
+
 
 **open issues: 
 -data table does not populate on load

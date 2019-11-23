@@ -440,6 +440,7 @@ export default {
             destinationDepartAirport: this.destinationDepartAirport,
             homeArrivalAirport: this.homeArrivalAirport,
             returnflightCode: this.returnflightCode,
+            returnTimeframe: this.returnTimeframe,
             flightNotes: this.flightNotes,
 
             //other travel options

@@ -382,7 +382,7 @@ export default {
           departflightCode: this.request.departflightCode,
           destinationDepartAirport: this.request.destinationDepartAirport,
           homeArrivalAirport: this.request.homeArrivalAirport,
-          // returnTimeframe: this.request.returnTimeframe,
+          returnTimeframe: this.request.returnTimeframe,
           returnflightCode: this.request.returnflightCode,
           flightNotes: this.request.flightNotes,
 
