@@ -28,11 +28,18 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+
+## Firebase 
+
 ### firebase login
 firebase login
 
 ### firebase init
 firebase init
+
+### firebase cloud functions
+To deploy on could functions:
+firebase deploy --only functions
 
 v 1.03 (released 6/12/19)-> 
 -added verions number to footer
@@ -52,6 +59,9 @@ v 1.06 (released)
 --added loading spinner to submit button
 --added william to email and me to bcc line
 -fixed departing timeframe bug
+
+v 1.07 (working)
+--added UserEmail field to newRequest
 
 
 **open issues: 

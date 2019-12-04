@@ -479,7 +479,8 @@ export default {
             voucherPaid: null,
             envelopeReceived: null,
             versionNumber: 1,
-            submittedBy: firebase.auth().currentUser.displayName
+            submittedBy: firebase.auth().currentUser.displayName,
+            userEmail: firebase.auth().currentUser.email
 
             //other travelers practice
           })
