@@ -22,6 +22,10 @@
         <span>Log in</span>
         <v-icon right>exit_to_app</v-icon>
       </v-btn>
+      <!-- <v-btn class="hidden-sm-and-down" @click="testFirebase" v-if="user">
+        <span>User Creds</span>
+        <v-icon right>exit_to_app</v-icon>
+      </v-btn>-->
       <v-btn class="hidden-sm-and-down" @click="logout" v-if="user">
         <span>Sign Out</span>
         <v-icon right>exit_to_app</v-icon>
@@ -40,7 +44,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-      <!-- Home Link -->
+      <!-- New Request Link -->
       <v-list>
         <v-list-tile router to="/new-request">
           <v-list-tile-action>
@@ -48,6 +52,17 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>New Request</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+      <!-- FAQ Link -->
+      <v-list>
+        <v-list-tile router to="/FAQ">
+          <v-list-tile-action>
+            <v-icon>question_answer</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>FAQ</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -84,7 +99,7 @@
 
 <script>
 import firebase from "firebase";
-import db from "@/firebase/init";
+// import db from "@/firebase/init";
 
 export default {
   components: {},
@@ -114,7 +129,7 @@ export default {
       this.$router.push({ name: "home" });
     },
     logout() {
-      console.log(firebase.auth().currentUser.displayName);
+      // console.log(firebase.auth().currentUser.displayName);
       firebase
         .auth()
         .signOut()
@@ -123,11 +138,12 @@ export default {
             name: "Login"
           });
         });
-      console.log("logout");
+      // console.log("logout");
     },
     testFirebase() {
-      console.log(firebase.auth().currentUser.displayName);
-      console.log(firebase.auth().currentUser.email);
+      // console.log(firebase.auth().currentUser.displayName);
+      // console.log(firebase.auth().currentUser.email);
+      // console.log(firebase.auth().currentUser.uid);
     }
   },
 

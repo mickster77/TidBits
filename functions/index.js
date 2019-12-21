@@ -44,7 +44,7 @@ exports.newRequestEmail = functions.firestore.document('newRequests/{requestId}'
                     <p>p.s., Let me know if any other information would be useful in this email....</p>
                     </div>`  // html
     };
-    mailTransport.sendMail(mailOptions, function (err, info) {
+    mailTransport.sendMail(mailOptions, (err, info) => {
         if (err)
             return { data: err }
         else
@@ -96,7 +96,7 @@ exports.updateRequestEmail = functions.firestore.document('newRequests/{requestI
                     <p>${myArray}</p>
                     </div>`  // html
     };
-    mailTransport.sendMail(mailOptions, function (err, info) {
+    mailTransport.sendMail(mailOptions, (err, info) => {
         if (err)
             return { data: err }
         else
@@ -141,10 +141,43 @@ exports.deleteRequestEmail = functions.firestore.document('newRequests/{requestI
                     <p>p.s., Let me know if any other information would be useful in this email....</p>
                     </div>`  // html
     };
-    mailTransport.sendMail(mailOptions, function (err, info) {
+    mailTransport.sendMail(mailOptions, (err, info) => {
         if (err)
             return { data: err }
         else
             return { data: info };
     });
 });
+
+exports.sendAngryEmail = functions.https.onCall((data, context) => {
+    // ...
+    const mailTransport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: "kTravel930@gmail.com",
+            pass: "Ktravel1234",
+        },
+    });
+    const mailOptions = {
+        from: "kTravel930@gmail.com", // from line
+        // Normal emails:
+        to: ["kathryn.marshall@navy.mil", data.userEmail],
+        cc: "william.bolton@navy.mil",
+        bcc: "michael._black@icloud.com",
+        // Test emails:
+        // to: "michael._black@icloud.com",
+        // cc: data.email,
+        subject: `Travel Claim Needed`, // Subject line
+        html: `<div>
+                    <p>Hi ${data.name}</p>
+                    <p>Can you please submit your travel voucher for your recent trip to ${data.destination}?</p>
+                     <p>Thanks!</p>
+                    </div>`  // html
+    };
+    mailTransport.sendMail(mailOptions, (err, info) => {
+        if (err)
+            return { data: err }
+        else
+            return { data: info };
+    });
+})

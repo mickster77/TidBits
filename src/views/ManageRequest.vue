@@ -22,6 +22,9 @@
                     <v-btn flat value="new">
                       <span>New</span>
                     </v-btn>
+                    <v-btn flat value="ticketed">
+                      <span>Ticketed</span>
+                    </v-btn>
                     <v-btn flat value="ongoing">
                       <span>Ongoing</span>
                     </v-btn>
@@ -107,9 +110,6 @@ export default {
   },
   methods: {
     editRequest() {
-      console.log("do this later");
-      let docRef = db.collection("newRequests").doc(this.requestID);
-
       db.collection("newRequests")
         .doc(this.requestID)
         .update({
@@ -124,7 +124,6 @@ export default {
         })
         .then(() => {
           // delete the smoothie from the array to update page
-          console.log("updated!!");
           this.$router.push({
             name: "Home"
           });

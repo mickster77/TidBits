@@ -8,6 +8,7 @@ import ViewRequest from '@/views/ViewRequest'
 import ManageRequest from '@/views/ManageRequest'
 import EditRequest from '@/views/EditRequest'
 import Burnlist from '@/views/Burnlist'
+import FAQ from '@/views/FAQ'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -71,6 +72,14 @@ const router = new Router({
       path: '/burnlist/',
       name: 'Burnlist',
       component: Burnlist,
+      meta: {
+        requiresAuth: false,
+      },
+    },
+    {
+      path: '/FAQ/',
+      name: 'FAQ',
+      component: FAQ,
       meta: {
         requiresAuth: false,
       },

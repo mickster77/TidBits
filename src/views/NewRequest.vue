@@ -1,10 +1,14 @@
  <template>
   <div>
-    <h1>New Request</h1>
     <v-form>
       <v-container>
         <v-layout row wrap>
-          <h3 xs12>Basic Travel Info</h3>
+          <v-flex xs12>
+            <h1>New Request</h1>
+          </v-flex>
+          <v-flex xs12>
+            <h3>Basic Travel Info</h3>
+          </v-flex>
           <v-flex xs12>
             <v-text-field label="Traveler Name:" v-model="name"></v-text-field>
           </v-flex>
@@ -390,8 +394,6 @@ export default {
       voucherSigned: null,
       voucherPaid: null,
       envelopeReceived: null,
-      submittedBy: null,
-      userEmail: null,
       versionNumber: 1
     };
   },
@@ -482,7 +484,8 @@ export default {
             envelopeReceived: null,
             versionNumber: 1,
             submittedBy: firebase.auth().currentUser.displayName,
-            userEmail: firebase.auth().currentUser.email
+            userEmail: firebase.auth().currentUser.email,
+            uid: firebase.auth().currentUser.uid
 
             //other travelers practice
           })

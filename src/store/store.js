@@ -4,6 +4,8 @@ import firebase from "firebase"; // needed for user auth
 import db from "@/firebase/init";
 
 Vue.use(Vuex)
+
+// I only really use this store to help with displaying the right requests in the data tabel on the home page.
 export const store = new Vuex.Store({
     state: {
         requests: [{ name: "normal requests" }],
@@ -27,6 +29,8 @@ export const store = new Vuex.Store({
             let sortedArray = state.requests.sort((a, b) => (a.dateSubmitted < b.dateSubmitted) ? 1 : -1)
             if (payload === "new") {
                 state.visibleRequests = sortedArray.filter(request => request.status === "new")
+            } else if (payload === "ticketed") {
+                state.visibleRequests = sortedArray.filter(request => request.status === "ticketed")
             } else if (payload === "ongoing") {
                 state.visibleRequests = sortedArray.filter(request => request.status === "ongoing")
             } else if (payload === "completed") {
@@ -41,7 +45,6 @@ export const store = new Vuex.Store({
     },
     actions: {
         updateRequests(context) {
-            console.log("update requesting")
             db.collection("newRequests")
                 .onSnapshot(snapshot => {
                     context.commit('nullRequests')
@@ -100,9 +103,9 @@ export const store = new Vuex.Store({
             })
             return newReq
         },
-        visibleRequests2: state => {
-            return sortedArray = state.requests.sort((a, b) => (a.dateSubmitted < b.dateSubmitted) ? 1 : -1)
-            //I am not using this right now...
-        },
+        // visibleRequests2: state => {
+        //     return sortedArray = state.requests.sort((a, b) => (a.dateSubmitted < b.dateSubmitted) ? 1 : -1)
+        //     //I am not using this right now...
+        // },
     }
 })

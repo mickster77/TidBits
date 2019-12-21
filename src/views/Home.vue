@@ -86,6 +86,9 @@
               <v-btn flat @click="filterRequests('new')" value="new">
                 <span>New</span>
               </v-btn>
+              <v-btn flat @click="filterRequests('ticketed')" value="ticketed">
+                <span>Ticketed</span>
+              </v-btn>
               <v-btn flat @click="filterRequests('ongoing')" value="ongoing">
                 <span>Ongoing</span>
               </v-btn>
@@ -117,6 +120,7 @@
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.dateSubmitted }}</td>
                 <td>{{ props.item.departDate }}</td>
+                <td>{{ props.item.returnDate }}</td>
                 <td>{{ props.item.placeVisited }}</td>
                 <td>
                   <v-chip small :class="`${props.item.status} caption my-2`">{{ props.item.status }}</v-chip>
@@ -140,6 +144,11 @@
                 <span>{{props.item.id}}</span>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
+                  <v-btn
+                    flat
+                    v-show="isAdmin"
+                    @click="sendEmail(props.item.userEmail, props.item.name, props.item.placeVisited)"
+                  >Send E-Mail</v-btn>
                   <v-btn
                     flat
                     router
@@ -213,7 +222,8 @@ export default {
       headers: [
         { text: "Name", align: "left", value: "name" },
         { text: "Date Submited", value: "dateSubmitted" },
-        { text: "Departing Date", value: "departDate" },
+        { text: "Depart Date", value: "departDate" },
+        { text: "Return Date", value: "returnDate" },
         { text: "Destination", value: "placeVisited" },
         { text: "Status", value: "status" }
       ]
@@ -285,31 +295,14 @@ export default {
           this.dialog = false;
         });
     },
-    manageRequest() {
-      console.log("display name:", firebase.auth().currentUser.displayName);
-      console.log("email:", firebase.auth().currentUser.email);
-      console.log("uid:", firebase.auth().currentUser.uid);
-      console.log("is Admin?", this.isAdmin);
-      console.log("is Developer?", this.isDeveloper);
-
-      // let userID = firebase.auth().currentUser.displayName;
-      // let docRef = db.collection("users").doc(userID);
-      // console.log(docRef);
-      // docRef
-      //   .get()
-      //   .then(function(doc) {
-      //     if (doc.exists) {
-      //       console.log("Document data:", doc.data());
-      //       console.log(doc.data().alias);
-      //       console.log(doc.data().slugh);
-      //     } else {
-      //       // doc.data() will be undefined in this case
-      //       console.log("No such document!");
-      //     }
-      //   })
-      //   .catch(function(error) {
-      //     console.log("Error getting document:", error);
-      //   });
+    sendEmail(email, name, destination) {
+      // console.log(message);
+      var sendMessage = firebase.functions().httpsCallable("sendAngryEmail");
+      sendMessage({
+        email: email,
+        name: name,
+        destination: destination
+      }).then();
     }
   }
 };
@@ -322,6 +315,9 @@ export default {
 
 .v-chip.new {
   background: red;
+}
+.v-chip.ticketed {
+  background: blue;
 }
 .v-chip.ongoing {
   background: orange;

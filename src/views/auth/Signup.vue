@@ -53,39 +53,35 @@ export default {
   methods: {
     signup() {
       if (this.alias && this.email && this.password) {
+        //verify all fields are filled out
         this.feedback = null;
+        // Generate slug based on alias
         this.slug = slugify(this.alias, {
           replacement: "-",
           remove: /[$*_+~.()'"!\-:@]/g,
           lower: true
         });
         console.log(this.slug);
+
+        // Esstablish user
         firebase
           .auth()
           .createUserWithEmailAndPassword(this.email, this.password)
+          .catch(error =>
+            // Handle Errors here.
+            {
+              return (this.feedback = error.message);
+            }
+          )
           .then(cred => {
             cred.user.updateProfile({
-              displayName: this.slug
+              displayName: this.slug,
+              email: this.email
             });
-            let ref = db.collection("users").doc(this.slug);
-            ref.set({
-              alias: this.alias,
-              user_id: cred.user.uid,
-              slug: this.slug
-            });
-          })
-          .then(() => {
             this.$router.push({
               name: "Home"
             });
-          })
-          .catch(err => {
-            console.log(err);
-            this.feedback = err.message;
           });
-        // let ref = db.collection("users").doc(this.slug);
-      } else {
-        this.feedback = "You must enter all fields";
       }
     }
   }
