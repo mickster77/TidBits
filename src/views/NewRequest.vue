@@ -318,6 +318,7 @@ export default {
     return {
       //Form stuff
       feedback: null,
+      // Tied to the submit button to show a loading state when A-syncing to firebase
       loading: false,
       //basic travel info
       name: null,
@@ -390,6 +391,7 @@ export default {
       voucherPaid: null,
       envelopeReceived: null,
       submittedBy: null,
+      userEmail: null,
       versionNumber: 1
     };
   },

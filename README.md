@@ -41,6 +41,13 @@ firebase init
 To deploy on could functions:
 firebase deploy --only functions
 
+## Git
+
+### Youtube
+https://www.youtube.com/watch?v=wMqukSKYcvU
+
+
+
 v 1.03 (released 6/12/19)-> 
 -added verions number to footer
 -added kay to admin email list
@@ -60,7 +67,7 @@ v 1.06 (released)
 --added william to email and me to bcc line
 -fixed departing timeframe bug
 
-v 1.07 (working)
+v 1.07 (Released)
 --added UserEmail field to newRequest
 
 

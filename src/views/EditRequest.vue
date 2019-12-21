@@ -12,7 +12,7 @@
           <v-flex xs12 sm6>
             <v-text-field
               label="What organization?"
-              placeholder="e.g., NNL-Bettis, BPMIT"
+              placeholder="e.g., NNL-Bettis, BPMI"
               v-model="request.placeVisited"
             ></v-text-field>
           </v-flex>
