@@ -27,15 +27,31 @@
           </v-expansion-panel>
         </v-container>
       </v-flex>
+      <!-- Feeback -->
+      <h1>Feedback</h1>
+      <v-flex xs12>
+        <v-textarea box label="How can the site improve?" auto-grow v-model="feedback"></v-textarea>
+      </v-flex>
+      <v-flex xs12>
+        <v-btn @click="submitFeedback">Submit</v-btn>
+      </v-flex>
+      <v-flex xs12>
+        <span class="feedback">{{formFeedback}}</span>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import firebase from "firebase"; // needed for user auth
+import db from "@/firebase/init";
+
 export default {
   name: "FAQ",
   data() {
     return {
+      feedback: null,
+      formFeedback: null,
       Questions: [
         {
           title: "What do I do after submitting a request?",
@@ -54,14 +70,60 @@ export default {
         }
       ]
     };
-  }
+  },
+  computed: {},
+  methods: {
+    submitFeedback() {
+      var today = new Date();
+      if (this.feedback == null) {
+        this.formFeedback = "no feedback provided";
+      } else {
+        this.formFeedback = null;
+
+        db.collection("feedback") // Real database
+          .add({
+            dateSubmitted:
+              today.getFullYear() +
+              "-" +
+              (today.getMonth() + 1) +
+              "-" +
+              today.getDate(),
+            feedback: this.feedback,
+            name: firebase.auth().currentUser.displayName,
+            userEmail: firebase.auth().currentUser.email,
+            uid: firebase.auth().currentUser.uid
+          })
+          .then(
+            ((this.feedback = null), (this.formFeedback = "feedback submitted"))
+          )
+          .catch(function(error) {
+            alert(error.message);
+          });
+        // var sendMessage = firebase
+        //   .functions()
+        //   .httpsCallable("sendFeedbackEmail");
+        // sendMessage({
+        //   email: firebase.auth().currentUser.email,
+        //   name: firebase.auth().currentUser.displayName,
+        //   feedback: this.feedback
+        // }).then(
+        //   ((this.feedback = null), (this.formFeedback = "feedback submitted"))
+        // );
+      }
+    }
+  },
+  created() {}
 };
 </script>
 
 <style>
 .myFaq {
-  color: lightgreen;
+  /* color: lightgreen; */
   font-weight: bold;
   font-size: 12pt;
+}
+.feedback {
+  color: red;
+  font-weight: bold;
 }
 </style>

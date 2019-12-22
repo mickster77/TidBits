@@ -70,6 +70,11 @@ v 1.06 (released)
 v 1.07 (Released)
 --added UserEmail field to newRequest
 
+v 1.08 (Released)
+--added FAQ
+--added burn list
+--added angry email functionality
+--Revise signup to not use "users" collection
 
 **open issues: 
 -data table does not populate on load

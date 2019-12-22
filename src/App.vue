@@ -7,7 +7,7 @@
     <v-footer>
       <v-btn @click="darkTheme = !darkTheme">Change Theme</v-btn>
       <v-spacer></v-spacer>
-      <span class="px-5">v 1.07</span>
+      <span class="px-5">v 1.08</span>
     </v-footer>
   </v-app>
 </template>
