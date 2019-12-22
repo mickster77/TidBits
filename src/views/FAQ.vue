@@ -1,7 +1,9 @@
 <template>
   <v-container fluid>
     <v-layout row wrap>
-      <v-flex>
+      <v-flex xs12 my-5>
+        <h1>FAQ</h1>
+
         <!-- vuetify example -->
         <!-- <v-expansion-panel>
         <v-expansion-panel-content v-for="(item,i) in 5" :key="i">
@@ -14,18 +16,16 @@
         </v-expansion-panel-content>
         </v-expansion-panel>-->
 
-        <v-container>
-          <v-expansion-panel>
-            <v-expansion-panel-content v-for="question in Questions" :key="question.title">
-              <template v-slot:header>
-                <div class="myFaq">{{question.title}}</div>
-              </template>
-              <v-card>
-                <v-card-text>{{question.answer}}</v-card-text>
-              </v-card>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-container>
+        <v-expansion-panel>
+          <v-expansion-panel-content v-for="question in Questions" :key="question.title">
+            <template v-slot:header>
+              <div class="myFaq">{{question.title}}</div>
+            </template>
+            <v-card>
+              <v-card-text>{{question.answer}}</v-card-text>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
       </v-flex>
       <!-- Feeback -->
       <h1>Feedback</h1>
