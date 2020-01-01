@@ -2,13 +2,16 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/auth/Login'
 import Signup from '@/views/auth/Signup'
-import Home from '@/views/Home'
-import NewRequest from '@/views/NewRequest'
-import ViewRequest from '@/views/ViewRequest'
-import ManageRequest from '@/views/ManageRequest'
-import EditRequest from '@/views/EditRequest'
+import Tidbits from '@/views/Tidbits'
+import ToDo from '@/views/ToDo'
+import Test from '@/views/Test'
+// import NewRequest from '@/views/NewRequest'
+// import ViewRequest from '@/views/ViewRequest'
+// import ManageRequest from '@/views/ManageRequest'
+// import EditRequest from '@/views/EditRequest'
 import Burnlist from '@/views/Burnlist'
-import FAQ from '@/views/FAQ'
+import Letters from '@/views/Letters'
+// import FAQ from '@/views/FAQ'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -17,6 +20,11 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/',
+      redirect: '/login'
+    },
+
     {
       path: '/signup',
       name: 'Signup',
@@ -29,61 +37,37 @@ const router = new Router({
 
     },
     {
-      path: '/',
-      name: 'Home',
-      component: Home,
-      meta: {
-        requiresAuth: true,
-      }
+      path: '/test',
+      name: 'Test',
+      component: Test,
     },
     {
-      path: '/new-request',
-      name: 'NewRequest',
-      component: NewRequest,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: '/view-request/:request_id',
-      name: 'ViewRequest',
-      component: ViewRequest,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: '/edit-request/:request_id',
-      name: 'EditRequest',
-      component: EditRequest,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: '/manage-request/:request_id',
-      name: 'ManageRequest',
-      component: ManageRequest,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: '/burnlist/',
+      path: '/Burnlist',
       name: 'Burnlist',
       component: Burnlist,
+    },
+    {
+      path: '/letters',
+      name: 'Letters',
+      component: Letters,
+    },
+    {
+      path: '/:uid',
+      name: 'Tidbits',
+      component: Tidbits,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
       },
     },
     {
-      path: '/FAQ/',
-      name: 'FAQ',
-      component: FAQ,
+      path: '/todo/:uid',
+      name: 'ToDo',
+      component: ToDo,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
       },
-    }
+    },
+
   ]
 })
 

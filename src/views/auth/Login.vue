@@ -8,7 +8,12 @@
             <v-text-field label="Email" type="email" v-model="email"></v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-text-field label="Password" type="password" v-model="password"></v-text-field>
+            <v-text-field
+              label="Password"
+              type="password"
+              v-model="password"
+              v-on:keyup.enter="login"
+            ></v-text-field>
           </v-flex>
           <v-flex xs12>
             <p class="red--text feedback" v-if="feedback">{{feedback}}</p>
@@ -43,16 +48,39 @@ export default {
   },
   methods: {
     login() {
-      console.log(this.email);
+      // console.log(this.email);
       if (this.email && this.password) {
         this.feedback = null;
+
+        // firebase
+        //   .auth()
+        //   .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        //   .then(function() {
+        //     // Existing and future Auth states are now persisted in the current
+        //     // session only. Closing the window would clear any existing state even
+        //     // if a user forgets to sign out.
+        //     // ...
+        //     // New sign-in will be persisted with session persistence.
+        //     return firebase
+        //       .auth()
+        //       .signInWithEmailAndPassword(this.email, this.password);
+        //   })
+        //   .catch(function(error) {
+        //     // Handle Errors here.
+        //     this.feedback = error.code;
+        //     alert(error.message);
+        //   });
+
         firebase
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then(cred => {
-            // console.log(cred.user);
+            // firebase
+            //   .auth()
+            //   .setPersistence(firebase.auth.Auth.Persistence.SESSION).then;
             this.$router.push({
-              name: "Home"
+              name: "Tidbits",
+              params: { uid: firebase.auth().currentUser.uid }
             });
           })
           .catch(err => {

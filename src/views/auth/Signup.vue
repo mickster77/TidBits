@@ -13,7 +13,7 @@
             <v-text-field label="Password" type="password" v-model="password"></v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-text-field label="Alias" type="text" v-model="alias"></v-text-field>
+            <v-text-field label="UserName" type="text" v-model="userName"></v-text-field>
           </v-flex>
           <v-flex xs12>
             <p class="red--text feedback" v-if="feedback">{{feedback}}</p>
@@ -36,8 +36,9 @@
 
 <script>
 import slugify from "slugify";
-import db from "@/firebase/init";
 import firebase from "firebase";
+import db from "@/firebase/init";
+import { log } from "util";
 
 export default {
   name: "Signup",
@@ -45,45 +46,71 @@ export default {
     return {
       email: null,
       password: null,
-      alias: null,
+      userName: null,
       feedback: null,
       slug: null
     };
   },
   methods: {
     signup() {
-      if (this.alias && this.email && this.password) {
+      if (this.userName && this.email && this.password) {
         //verify all fields are filled out
         this.feedback = null;
-        // Generate slug based on alias
-        this.slug = slugify(this.alias, {
+
+        // Generate slug based on userName
+        this.slug = slugify(this.userName, {
           replacement: "-",
           remove: /[$*_+~.()'"!\-:@]/g,
           lower: true
         });
-        console.log(this.slug);
 
-        // Esstablish user
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(this.email, this.password)
-          .catch(error =>
-            // Handle Errors here.
-            {
-              return (this.feedback = error.message);
-            }
-          )
-          .then(cred => {
-            cred.user.updateProfile({
-              displayName: this.slug,
-              email: this.email
+        // check is the username is taken
+        var docRef = db.collection("UserNames").doc(this.slug);
+        var docExisits = false;
+        docRef.get().then(function(doc) {
+          if (doc.exists) {
+            alert("this username is taken");
+            docExisits = true;
+          } else {
+            // doc.data() will be undefined in this case
+            alert("This username is available!!");
+            docExisits = false;
+          }
+        });
+        if (!docExisits) {
+          // Esstablish user
+          firebase
+            .auth()
+            .createUserWithEmailAndPassword(this.email, this.password)
+            .catch(error =>
+              // Handle Errors here.
+              {
+                return (this.feedback = error.message);
+                // console.log(error.message);
+              }
+            )
+            .then(cred => {
+              cred.user.updateProfile({
+                displayName: this.slug,
+                email: this.email
+              });
+              return db
+                .collection("UserNames")
+                .doc(cred.user.uid)
+                .set({
+                  userName: this.slug,
+                  email: cred.user.email
+                });
+            })
+            .then(() => {
+              this.$router.push({
+                name: "Tidbits",
+                params: { uid: firebase.auth().currentUser.uid }
+              });
             });
-            this.$router.push({
-              name: "Home"
-            });
-          });
-      }
-    }
+        } // end docExisits if
+      } // form validate if
+    } // end signup.
   }
 };
 </script>

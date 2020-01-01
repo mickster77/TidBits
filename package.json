@@ -1,5 +1,5 @@
 {
-  "name": "k-travel",
+  "name": "Tidbits",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^2.6.11",
     "firebase": "^7.6.1",
+    "lodash": "^4.17.15",
     "nodemailer": "^6.4.2",
     "slugify": "^1.3.6",
     "vue": "^2.6.11",

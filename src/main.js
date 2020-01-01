@@ -1,3 +1,4 @@
+import firebase from 'firebase'
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
@@ -9,8 +10,21 @@ import { store } from './store/store'
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store: store,
-  render: h => h(App)
-}).$mount('#app')
+let app = ''
+
+firebase.auth().onAuthStateChanged(() => {
+  if (!app) {
+    app = new Vue({
+      router,
+      store: store,
+      render: h => h(App)
+    }).$mount('#app')
+  }
+});
+
+// Old implementation::  The above implementation keeps user signed in after refresh
+// new Vue({
+//   router,
+//   store: store,
+//   render: h => h(App)
+// }).$mount('#app')
