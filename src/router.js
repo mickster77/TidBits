@@ -5,7 +5,7 @@ import Signup from '@/views/auth/Signup'
 import Tidbits from '@/views/Tidbits'
 import ToDo from '@/views/ToDo'
 import Test from '@/views/Test'
-// import NewRequest from '@/views/NewRequest'
+import FAQ from '@/views/FAQ'
 // import ViewRequest from '@/views/ViewRequest'
 // import ManageRequest from '@/views/ManageRequest'
 // import EditRequest from '@/views/EditRequest'
@@ -45,6 +45,11 @@ const router = new Router({
       path: '/Burnlist',
       name: 'Burnlist',
       component: Burnlist,
+    },
+    {
+      path: '/FAQ',
+      name: 'FAQ',
+      component: FAQ,
     },
     {
       path: '/letters',

@@ -1,13 +1,15 @@
 <template>
   <div>
-    <v-container fluid green darken-4>
-      <v-layout row>
-        <v-flex xs12 sm6>
-          <h1>Hi there</h1>
+    <v-container fluid>
+      <v-layout row wrap>
+        <v-flex xs12 sm4 class="ma-2">
+          <TidBit :tidBit="tidBit" />
         </v-flex>
-        <v-flex>
-          <h1>Hi there</h1>
-          <v-icon large>text_edit</v-icon>
+        <v-flex xs12 sm4 class="ma-2">
+          <TidBit :tidBit="tidBitTwo" />
+        </v-flex>
+        <v-flex xs12 sm4 class="ma-2">
+          <TidBit :tidBit="tidBitThree" />
         </v-flex>
       </v-layout>
     </v-container>
@@ -65,13 +67,45 @@
 <script>
 // import firebase from "firebase"; // needed for user auth
 import db from "@/firebase/init";
+import TidBit from "@/components/TidBit";
 
 export default {
   name: "Test",
+  components: { TidBit },
   data() {
     return {
       myData: "data",
-      tidBits: []
+      tidBits: [],
+      tidBit: {
+        title: "My Title",
+        source: "My Source",
+        thought: "My Thoughts",
+        tags: ["tag 1", "tag 2"],
+        nowDate: Date.now(),
+        id: "12345",
+        youtubeSrc: "https://www.youtube.com/embed/paNuap1mw3A",
+        imgSrc: null
+      },
+      tidBitTwo: {
+        title: "My Title Two",
+        source: "My Source Two",
+        thought: "My Thoughts Two",
+        tags: ["tag 3", "tag 2"],
+        nowDate: Date.now(),
+        id: "23456",
+        youtubeSrc: null,
+        imgSrc: "https://cdn.vuetifyjs.com/images/cards/forest.jpg"
+      },
+      tidBitThree: {
+        title: "My Title Three",
+        source: "My Source Three",
+        thought: "My Thoughts Three",
+        tags: ["tag 3", "tag 5"],
+        nowDate: Date.now(),
+        id: "34567",
+        youtubeSrc: null,
+        imgSrc: "https://images.app.goo.gl/JaTQzQTo9EFGZUu8A"
+      }
     };
   },
   created() {

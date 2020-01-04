@@ -20,6 +20,18 @@
                 <span class="headline mb-0">{{ tidBit.title }}</span>
                 <v-spacer></v-spacer>
               </v-card-title>
+              <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="2.75"></v-img>
+
+              <v-card-media contain height="auto" class="mx-3">
+                <iframe
+                  width="300"
+                  height="200"
+                  src="https://www.youtube.com/embed/paNuap1mw3A"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </v-card-media>
               <v-card-text class="font-italic">{{tidBit.source}}</v-card-text>
               <span v-for="(tag, index) in tidBit.tags" :key="index">
                 <v-chip>{{tag}}</v-chip>
@@ -151,9 +163,9 @@
     <!-- Add TidBit -->
     <v-container align-center fluid>
       <v-layout row justify-center>
-        <!-- <v-btn fab color="info" fixed top right @click="printTidBit">
+        <v-btn fab color="info" fixed top right @click="printTidBit">
           <v-icon>edit</v-icon>
-        </v-btn>-->
+        </v-btn>
         <v-flex xs12>
           <v-dialog v-model="dialog" persistent fullscreen>
             <template v-slot:activator="{ on }">
@@ -530,11 +542,11 @@ export default {
     },
     printTidBit() {
       // console.log("test");
-      // console.table(this.randomTidBit);
+      console.table(this.randomTidBit.title);
       // console.log(this.randomTidBit.title);
 
       // console.log(this.allTidBits[0].title);
-      console.table(this.allTidBits);
+      // console.table(this.allTidBits);
       // console.log("totoal tidbits: " + this.$store.getters.totalTidBits);
       // console.table(this.$store.state.TidBits);
       // console.log(this.$store.getters.totalTidBits);

@@ -11,7 +11,7 @@ import { store } from './store/store'
 Vue.config.productionTip = false
 
 let app = ''
-
+// This is a git test.
 firebase.auth().onAuthStateChanged(() => {
   if (!app) {
     app = new Vue({

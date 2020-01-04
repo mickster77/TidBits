@@ -75,16 +75,17 @@
         </v-list-tile>
       </v-list>-->
       <!-- FAQ Link -->
-      <!-- <v-list>
+      <hr />
+      <v-list v-show="user">
         <v-list-tile router to="/FAQ">
           <v-list-tile-action>
             <v-icon>question_answer</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>FAQ</v-list-tile-title>
+            <v-list-tile-title>Feeback</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-      </v-list>-->
+      </v-list>
 
       <!-- Auth Links -->
 
