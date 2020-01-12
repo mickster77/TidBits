@@ -1,18 +1,18 @@
 <template>
   <v-container fluid>
-    <v-layout row wrap>
+    <v-row>
       <!-- Feeback -->
       <h1>Feedback</h1>
-      <v-flex xs12>
+      <v-col cols="12">
         <v-textarea box label="How can the site improve?" auto-grow v-model="feedback"></v-textarea>
-      </v-flex>
-      <v-flex xs12>
+      </v-col>
+      <v-col cols="12">
         <v-btn @click="submitFeedback">Submit</v-btn>
-      </v-flex>
-      <v-flex xs12>
+      </v-col>
+      <v-col cols="12">
         <span class="feedback">{{formFeedback}}</span>
-      </v-flex>
-      <v-flex xs12 my-5>
+      </v-col>
+      <v-col cols="12" my-5>
         <h1>FAQ</h1>
         <!-- vuetify example -->
         <!-- <v-expansion-panel>
@@ -36,8 +36,8 @@
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

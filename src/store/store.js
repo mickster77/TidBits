@@ -29,7 +29,7 @@ export const store = new Vuex.Store({
     },
     actions: {
         updateTidBits(context) {
-            console.log(firebase.auth().currentUser.uid)
+            // console.log(firebase.auth().currentUser.uid)
             db.collection("UserOwned")
                 .doc(firebase.auth().currentUser.uid)
                 .collection("TidBits").

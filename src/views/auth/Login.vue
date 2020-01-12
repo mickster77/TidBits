@@ -19,7 +19,7 @@
             <p class="red--text feedback" v-if="feedback">{{feedback}}</p>
           </v-flex>
           <v-flex xs12>
-            <v-btn @click.prevent="login">Submit</v-btn>
+            <v-btn @click.prevent="login" color="primary">Submit</v-btn>
           </v-flex>
           <v-flex xs12>
             <p>
@@ -74,7 +74,7 @@ export default {
         firebase
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
-          .then(cred => {
+          .then(() => {
             // firebase
             //   .auth()
             //   .setPersistence(firebase.auth.Auth.Persistence.SESSION).then;

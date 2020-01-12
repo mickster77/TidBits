@@ -1,41 +1,41 @@
 <template>
   <div>
     <v-container>
-      <v-btn @click="printNotes">Print Notes</v-btn>
-      <v-layout row wrap>
-        <v-flex xs6>
+      <!-- <v-btn @click="printNotes">Print Notes</v-btn> -->
+      <v-row>
+        <v-col xs="12">
           <v-combobox v-model="selectedLetter" :items="numLetter" label="Select a letter"></v-combobox>
-        </v-flex>
+        </v-col>
         <div v-if="selectedLetter">
-          <v-flex xs12>
+          <v-col xs="12">
             <h2>{{visibleLetter.title}}</h2>
-          </v-flex>
-          <v-flex xs12>
+          </v-col>
+          <v-col xs="12">
             <span v-html="visibleLetter.content"></span>
             <hr />
             <h5>Footnotes:</h5>
             <span v-html="visibleLetter.footnotes"></span>
-          </v-flex>
-          <v-flex xs6>
-            <v-text-field box label="Add a note" v-model="newNote" @keyup.enter="addNote"></v-text-field>
-          </v-flex>
+          </v-col>
+          <v-col xs="6">
+            <v-text-field filled label="Add a note" v-model="newNote" @keyup.enter="addNote"></v-text-field>
+          </v-col>
         </div>
-      </v-layout>
+      </v-row>
     </v-container>
     <v-container>
-      <v-layout row wrap>
-        <v-flex xs12 sm5 v-for="(note,index) in notes" :key="index" class="ma-2">
+      <v-row>
+        <v-col xs="12" sm="5" v-for="(note,index) in notes" :key="index" class="ma-2">
           <v-card>
             <v-card-title primary-title>
               <h3 class="headline mb-0">{{note.note}}</h3>
             </v-card-title>
             <v-card-text>{{note.userName}}</v-card-text>
             <v-card-actions>
-              <v-btn flat color="warning" @click="deleteNote(note.id)">delete</v-btn>
+              <v-btn text color="warning" @click="deleteNote(note.id)">delete</v-btn>
             </v-card-actions>
           </v-card>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -43,7 +43,6 @@
 <script>
 import db from "@/firebase/init";
 import firebase from "firebase"; // needed for user auth
-import _ from "lodash";
 
 export default {
   name: "Letters",

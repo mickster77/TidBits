@@ -1,5 +1,29 @@
 <template>
   <nav>
+    <v-card height="400" width="256" class="mx-auto">
+      <v-navigation-drawer permanent>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="title">Application</v-list-item-title>
+            <v-list-item-subtitle>subtext</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-list dense nav>
+          <v-list-item v-for="item in links" :key="item.title">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+    </v-card>
     <v-toolbar flat app>
       <v-toolbar-side-icon @click="showSidebar = !showSidebar"></v-toolbar-side-icon>
       <!-- <v-btn flat router :to="{name: 'Home', params: { uid: user.uid }}">
@@ -163,9 +187,9 @@ export default {
     },
     testFirebase() {
       // console.log("display name: " + firebase.auth().currentUser.displayName);
-      console.log("email: " + firebase.auth().currentUser.email);
-      console.log("UID: " + firebase.auth().currentUser.uid);
-      console.log("UID: " + firebase.auth().currentUser.displayName);
+      // console.log("email: " + firebase.auth().currentUser.email);
+      // console.log("UID: " + firebase.auth().currentUser.uid);
+      // console.log("UID: " + firebase.auth().currentUser.displayName);
     },
     getUID() {
       if (firebase.auth().currentUser) {

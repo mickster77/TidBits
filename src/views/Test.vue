@@ -1,65 +1,65 @@
 <template>
   <div>
     <v-container fluid>
-      <v-layout row wrap>
-        <v-flex xs12 sm4 class="ma-2">
+      <v-row row wrap>
+        <v-col xs12 sm4 class="ma-2">
           <TidBit :tidBit="tidBit" />
-        </v-flex>
-        <v-flex xs12 sm4 class="ma-2">
+        </v-col>
+        <v-col xs12 sm4 class="ma-2">
           <TidBit :tidBit="tidBitTwo" />
-        </v-flex>
-        <v-flex xs12 sm4 class="ma-2">
+        </v-col>
+        <v-col xs12 sm4 class="ma-2">
           <TidBit :tidBit="tidBitThree" />
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-container>
     <v-container sucess ma-5>
-      <v-layout row wrap>
-        <v-flex grey darken-3 xs12 ma-3 pa-3>
+      <v-row row wrap>
+        <v-col grey darken-3 xs12 ma-3 pa-3>
           <h2>TidBits</h2>
           <p>The total # of tidbits are {{totalTids}}</p>
           <v-btn @click="printTidBits">printTidBits</v-btn>
-        </v-flex>
-        <v-flex grey darken-3 xs12 ma-3 pa-3>
+        </v-col>
+        <v-col grey darken-3 xs12 ma-3 pa-3>
           <h2>TidBit Titles</h2>
           <div v-for="(element, index) in tidBitTitles" :key="index">
             <p>{{element}}</p>
           </div>
-        </v-flex>
-        <v-flex grey darken-3 xs12 ma-3 pa-3>
+        </v-col>
+        <v-col grey darken-3 xs12 ma-3 pa-3>
           <h2>TidBit Sources</h2>
           <div v-for="(element, index) in tidBitSources" :key="index">
             <p>{{element}}</p>
           </div>
-        </v-flex>
-        <v-flex grey darken-3 xs12 red ma-3 pa-3>
+        </v-col>
+        <v-col grey darken-3 xs12 red ma-3 pa-3>
           <h2>TidBit Thoughts</h2>
           <div v-for="(element, index) in tidBitThoughts" :key="index">
             <p>{{element}}</p>
           </div>
-        </v-flex>
-        <v-flex grey darken-3 xs12 red ma-3 pa-3>
+        </v-col>
+        <v-col grey darken-3 xs12 red ma-3 pa-3>
           <h2>TidBit Tag Arrays</h2>
           <div v-for="(element, index) in tidBitTagsArray" :key="index">
             <p>{{element}}</p>
           </div>
-        </v-flex>
-        <v-flex grey darken-3 xs12 red ma-3 pa-3>
+        </v-col>
+        <v-col grey darken-3 xs12 red ma-3 pa-3>
           <h2>TidBit Tags</h2>
           <p>There are {{tidBitTags.length}} total tags</p>
 
           <div v-for="(element, index) in tidBitTags" :key="index">
             <p>{{element}}</p>
           </div>
-        </v-flex>
-        <v-flex grey darken-3 xs12 red ma-3 pa-3>
+        </v-col>
+        <v-col grey darken-3 xs12 red ma-3 pa-3>
           <h2>TidBit Unique Tags</h2>
           <p>There are {{tidBitTagsUnique.length}} unique tags</p>
           <div v-for="(element, index) in tidBitTagsUnique" :key="index">
             <p>{{element}}</p>
           </div>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>

@@ -1,21 +1,37 @@
+/* eslint-disable vue/valid-v-on */
 <template>
-  <v-container align-center fluid>
-    <v-layout row wrap>
-      <v-flex xs12>
-        <div v-for="(todoList, index) in todos" :key="index">
+  <v-container align-center id="top">
+    <v-row>
+      <v-btn @click="$vuetify.goTo(topTarget)" fab color="primary" fixed bottom right>
+        <v-icon>mdi-chevron-up</v-icon>
+      </v-btn>
+      <v-col cols="12">
+        <v-card class="pa-5">
+          <v-card-title primary-title>Todo Lists:</v-card-title>
+          <v-btn
+            v-for="todo in todos"
+            :key="todo.id"
+            class="ma-1 primary"
+            @click="goToScrollTarget(todo.id)"
+          >{{todo.title}}</v-btn>
+        </v-card>
+      </v-col>
+      <v-col>
+        <!-- <v-btn @click="$vuetify.goTo(target)" color="warning ">scroll to {{scrollName}}</v-btn> -->
+        <div v-for="(todoList, index) in todos" :key="index" :id="todoList.id.replace(/\s/g, '')">
           <!-- <p>{{todoList.title}}</p> -->
           <!-- <span>{{todoList.id}}</span> -->
           <TodoComponent :name="todoList.title" v-on:send="updateTime" />
         </div>
-        <v-text-field label="new list" v-model="newTodoName" @keyup.enter="addToDo"></v-text-field>
-      </v-flex>
-      <v-flex xs12>
+        <v-text-field label="New Todo List" v-model="newTodoName" @keyup.enter="addToDo"></v-text-field>
+      </v-col>
+      <v-col cols="12">
         <v-btn @click.prevent="addToDo" color="primary">Add Todo</v-btn>
-      </v-flex>
-      <v-flex xs12>
+      </v-col>
+      <v-col cols="12">
         <p v-show="feedback">{{feedback}}</p>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -34,7 +50,9 @@ export default {
     return {
       todos: [],
       newTodoName: null,
-      feedback: null
+      feedback: null,
+      scrollName: "Mike",
+      scrollTop: "top"
     };
   },
   methods: {
@@ -67,11 +85,24 @@ export default {
           created_at: Date.now()
         })
         .then(function() {
-          console.log("updated");
+          // console.log("updated");
         });
+    },
+    goToScrollTarget(name) {
+      this.scrollName = name.replace(/\s/g, "");
+      this.$vuetify.goTo(this.target);
     }
   },
-  computed: {},
+  computed: {
+    target() {
+      // for v-scroll
+      // alert(this.scrollName);
+      return "#" + this.scrollName;
+    },
+    topTarget() {
+      return screenTop;
+    }
+  },
   created() {
     this.todos = [];
     let newTodos = [];

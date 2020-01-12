@@ -36,6 +36,8 @@ import './plugins/vuetify'
 import router from './router'
 // import 'material-design-icons-iconfont/dist/material-design-icons.css' // Ensure you are using css-loader
 import '@mdi/font/css/materialdesignicons.css' // update with vuetify 2.0
+// import 'vuetify/dist/vuetify.min.css'
+
 
 import { store } from './store/store'
 import vuetify from './plugins/vuetify';

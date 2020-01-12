@@ -20,7 +20,7 @@
           </v-flex>
 
           <v-flex xs12>
-            <v-btn @click="signup" class="center">Submit</v-btn>
+            <v-btn @click="signup" color="primary" class="center">Submit</v-btn>
           </v-flex>
           <v-flex xs12 class="my-0">
             <p>
@@ -38,7 +38,7 @@
 import slugify from "slugify";
 import firebase from "firebase";
 import db from "@/firebase/init";
-import { log } from "util";
+// import { log } from "util";
 
 export default {
   name: "Signup",

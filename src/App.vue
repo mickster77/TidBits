@@ -1,11 +1,11 @@
 <template>
-  <v-app :dark="darkTheme">
-    <Navbar />
+  <v-app>
+    <Navbar2 />
     <v-content>
       <router-view></router-view>
     </v-content>
     <v-footer>
-      <v-btn @click="darkTheme = !darkTheme">Change Theme</v-btn>
+      <v-btn @click="changeTheme()">Change Theme</v-btn>
       <v-spacer></v-spacer>
       <span class="px-5">v 1.00</span>
     </v-footer>
@@ -13,17 +13,29 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
+import Navbar2 from "@/components/Navbar2";
 
 export default {
   name: "App",
   components: {
-    Navbar
+    // Navbar,
+    Navbar2
   },
   data() {
     return {
       darkTheme: true
     };
+  },
+  methods: {
+    changeTheme() {
+      this.$vuetify.them.dark = false;
+    }
+  },
+  computed: {
+    isDark() {
+      return this.$vuetify.theme.dark ? "dark" : "light";
+    }
   }
 };
 </script>

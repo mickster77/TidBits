@@ -9,7 +9,7 @@ const letters = {
 
         addNote(state, note) {
             state.notes.push(note)
-            console.table(state.notes)
+            // console.table(state.notes)
         },
         updateSelectedLetter(state, payload) {
             state.selectedLetter = payload.letter
@@ -20,8 +20,8 @@ const letters = {
     },
     actions: {
         updateLetterNotes(context) {
-            console.log("update letter notes")
-            console.log(this.state.selectedLetter)
+            // console.log("update letter notes")
+            // console.log(this.state.selectedLetter)
             if (this.state.selectedLetter) {
                 db.collection("Letters")
                     .doc(this.state.selectedLetter.toString())
