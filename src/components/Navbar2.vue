@@ -3,12 +3,9 @@
     <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-avatar>
-          <!-- <v-img src="https://randomuser.me/api/portraits/women/100.jpg"></v-img> -->
-          <v-icon>mdi-account</v-icon>
+          <v-img v-if="user" :src="imgURL"></v-img>
         </v-list-item-avatar>
-
         <v-list-item-title>{{displayName}}</v-list-item-title>
-
         <!-- <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>-->
@@ -77,6 +74,7 @@ export default {
       user: null,
       showSidebar: false,
       isAdmin: true,
+      imgURL: "https://randomuser.me/api/portraits/lego/1.jpg",
       items: [
         {
           title: "TidBits",
@@ -85,7 +83,7 @@ export default {
         },
         {
           title: "ToDo",
-          icon: "mdi-account-group-outline",
+          icon: "mdi-clipboard-check-multiple",
           link: { name: "ToDo", params: { uid: this.getUID() } }
         },
         // {
@@ -95,8 +93,33 @@ export default {
         // },
         {
           title: "Letters",
-          icon: "mdi-account",
+          icon: "mdi-book-multiple",
           link: { name: "Letters" }
+        },
+        {
+          title: "FAQ",
+          icon: "mdi-frequently-asked-questions",
+          link: { name: "FAQ" }
+        },
+        {
+          title: "Blog",
+          icon: "mdi-boom-gate-down-outline",
+          link: { name: "FAQ" }
+        },
+        {
+          title: "Library",
+          icon: "mdi-boom-gate-down-outline",
+          link: { name: "FAQ" }
+        },
+        {
+          title: "Forum",
+          icon: "mdi-boom-gate-down-outline",
+          link: { name: "FAQ" }
+        },
+        {
+          title: "Voice Notes",
+          icon: "mdi-boom-gate-down-outline",
+          link: { name: "FAQ" }
         }
       ],
       links: [
@@ -144,33 +167,43 @@ export default {
       } else {
         return null;
       }
+    },
+    updateProfilePic() {
+      var storage = firebase.storage();
+      var path = this.$store.getters.userDisplayName + "/profilePic.jpg";
+      var pathReference = storage.ref(path);
+      pathReference
+        .getDownloadURL()
+        .then(url => {
+          this.imgURL = url;
+        })
+        .catch(function(error) {
+          console.warn(error);
+          console.log(error.code);
+          // storage/object-not-found
+        });
     }
   },
-
   computed: {
-    isDeveloper: function() {
-      if (this.user) {
-        let isMike =
-          firebase.auth().currentUser.email == "shit.mail@icloud.com";
-        let isKtravel =
-          firebase.auth().currentUser.email == "ktravel930@gmail.com";
-
-        if (isMike || isKtravel) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    },
     displayName() {
-      if (this.user) {
-        return firebase.auth().currentUser.displayName;
+      // if (this.user) {
+      //   return firebase.auth().currentUser.displayName;
+      // } else {
+      //   return null;
+      // }
+      if (this.$store.state.user) {
+        return this.$store.state.user.displayName;
       } else {
-        return null;
+        return "no user";
       }
     }
+    // user() {
+    //   if (this.$store.state.user) {
+    //     return this.$store.state.user;
+    //   } else {
+    //     return null;
+    //   }
+    // }
   },
   created() {
     this.user = firebase.auth().currentUser;
@@ -178,6 +211,7 @@ export default {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.user = user;
+        this.updateProfilePic();
       } else {
         this.user = null;
       }

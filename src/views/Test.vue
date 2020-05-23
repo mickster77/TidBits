@@ -1,63 +1,21 @@
 <template>
   <div>
     <v-container fluid>
-      <v-row row wrap>
-        <v-col xs12 sm4 class="ma-2">
-          <TidBit :tidBit="tidBit" />
-        </v-col>
-        <v-col xs12 sm4 class="ma-2">
-          <TidBit :tidBit="tidBitTwo" />
-        </v-col>
-        <v-col xs12 sm4 class="ma-2">
-          <TidBit :tidBit="tidBitThree" />
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container sucess ma-5>
-      <v-row row wrap>
-        <v-col grey darken-3 xs12 ma-3 pa-3>
-          <h2>TidBits</h2>
-          <p>The total # of tidbits are {{totalTids}}</p>
-          <v-btn @click="printTidBits">printTidBits</v-btn>
-        </v-col>
-        <v-col grey darken-3 xs12 ma-3 pa-3>
-          <h2>TidBit Titles</h2>
-          <div v-for="(element, index) in tidBitTitles" :key="index">
-            <p>{{element}}</p>
-          </div>
-        </v-col>
-        <v-col grey darken-3 xs12 ma-3 pa-3>
-          <h2>TidBit Sources</h2>
-          <div v-for="(element, index) in tidBitSources" :key="index">
-            <p>{{element}}</p>
-          </div>
-        </v-col>
-        <v-col grey darken-3 xs12 red ma-3 pa-3>
-          <h2>TidBit Thoughts</h2>
-          <div v-for="(element, index) in tidBitThoughts" :key="index">
-            <p>{{element}}</p>
-          </div>
-        </v-col>
-        <v-col grey darken-3 xs12 red ma-3 pa-3>
-          <h2>TidBit Tag Arrays</h2>
-          <div v-for="(element, index) in tidBitTagsArray" :key="index">
-            <p>{{element}}</p>
-          </div>
-        </v-col>
-        <v-col grey darken-3 xs12 red ma-3 pa-3>
-          <h2>TidBit Tags</h2>
-          <p>There are {{tidBitTags.length}} total tags</p>
-
-          <div v-for="(element, index) in tidBitTags" :key="index">
-            <p>{{element}}</p>
-          </div>
-        </v-col>
-        <v-col grey darken-3 xs12 red ma-3 pa-3>
-          <h2>TidBit Unique Tags</h2>
-          <p>There are {{tidBitTagsUnique.length}} unique tags</p>
-          <div v-for="(element, index) in tidBitTagsUnique" :key="index">
-            <p>{{element}}</p>
-          </div>
+      <v-row>
+        <v-col>
+          <h1>File Input</h1>
+          <v-file-input
+            :rules="rules"
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="Pick an avatar"
+            prepend-icon="mdi-camera"
+            label="Avatar"
+            @change="onFileSelected"
+          ></v-file-input>
+          <v-btn @click="uploadPhoto">Upload</v-btn>
+          <img :src="file" alt="none" />
+          <v-btn @click="showPic">Show Pic</v-btn>
+          <v-btn @click="tester">Tester</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -65,13 +23,13 @@
 </template>
 
 <script>
-// import firebase from "firebase"; // needed for user auth
+import firebase from "firebase"; // needed for cloud storage
 import db from "@/firebase/init";
-import TidBit from "@/components/TidBit";
+// import TidBit from "@/components/TidBit";
 
 export default {
   name: "Test",
-  components: { TidBit },
+  // components: { TidBit },
   data() {
     return {
       myData: "data",
@@ -105,7 +63,16 @@ export default {
         id: "34567",
         youtubeSrc: null,
         imgSrc: "https://images.app.goo.gl/JaTQzQTo9EFGZUu8A"
-      }
+      },
+      // file input
+      file: null,
+      rules: [
+        value =>
+          !value ||
+          value.size < 2000000 ||
+          "Avatar size should be less than 2 MB!"
+      ],
+      selectedFile: null
     };
   },
   created() {
@@ -126,66 +93,56 @@ export default {
   methods: {
     printTidBits() {
       // console.table(this.tidBitTags);
+    },
+    onFileSelected(event) {
+      console.log(event);
+      this.selectedFile = event;
+    },
+    uploadPhoto() {
+      var storage = firebase.storage();
+      var storageRef = storage.ref();
+      let displayName = this.displayName;
+      let storageString = displayName + "/profilePic.jpg";
+      var ref = storageRef.child(storageString);
+      ref.put(this.selectedFile).then(function(snapshot) {
+        console.log("Uploaded a blob or file!");
+        console.log(snapshot);
+      });
+    },
+    showPic() {
+      var storage = firebase.storage();
+      var pathReference = storage.ref("mickster/profilePic.jpg");
+      pathReference
+        .getDownloadURL()
+        .then(url => {
+          this.file = url;
+        })
+        .catch(function(error) {
+          console.log(error);
+          // Handle any errors
+        });
+    },
+    setImage(url) {
+      this.file = url;
+    },
+    tester() {
+      var storage = firebase.storage();
+      var pathReference = storage.ref("mickster/profilePics.jpg");
+      pathReference
+        .getDownloadURL()
+        .then(url => {
+          alert(url);
+        })
+        .catch(function(error) {
+          console.warn(error);
+          console.log(error.code);
+          // storage/object-not-found
+        });
     }
   },
   computed: {
-    totalTids() {
-      return this.tidBits.length;
-    },
-    tidBitTitles() {
-      let array = [];
-      this.tidBits.forEach(element => {
-        array.push(element.tidBit);
-      });
-      return array;
-    },
-    tidBitSources() {
-      let array = [];
-      this.tidBits.forEach(element => {
-        array.push(element.source);
-      });
-      return array;
-    },
-    tidBitSourcesUnique() {
-      let array = [];
-      this.getStoreTidBits.forEach(element => {
-        if (!array.includes(element)) {
-          array.push(element);
-        }
-      });
-      return array;
-    },
-    tidBitThoughts() {
-      let array = [];
-      this.tidBits.forEach(element => {
-        array.push(element.thought);
-      });
-      return array;
-    },
-    tidBitTagsArray() {
-      let array = [];
-      this.tidBits.forEach(element => {
-        array.push(element.tags);
-      });
-      return array;
-    },
-    tidBitTags() {
-      let array = [];
-      this.tidBitTagsArray.forEach(element => {
-        element.forEach(newElement => {
-          array.push(newElement);
-        });
-      });
-      return array;
-    },
-    tidBitTagsUnique() {
-      let array = [];
-      this.tidBitTags.forEach(element => {
-        if (!array.includes(element)) {
-          array.push(element);
-        }
-      });
-      return array;
+    displayName() {
+      return this.$store.getters.userDisplayName;
     }
   }
 };

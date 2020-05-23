@@ -1,10 +1,13 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row>
+      <v-col cols="12" my-5>
+        <h1>FAQ...not yet</h1>
+      </v-col>
       <!-- Feeback -->
-      <h1>Feedback</h1>
       <v-col cols="12">
-        <v-textarea box label="How can the site improve?" auto-grow v-model="feedback"></v-textarea>
+        <h1>Feedback</h1>
+        <v-textarea filled label="How can the site improve?" auto-grow v-model="feedback"></v-textarea>
       </v-col>
       <v-col cols="12">
         <v-btn @click="submitFeedback">Submit</v-btn>
@@ -12,31 +15,20 @@
       <v-col cols="12">
         <span class="feedback">{{formFeedback}}</span>
       </v-col>
-      <v-col cols="12" my-5>
-        <h1>FAQ</h1>
-        <!-- vuetify example -->
-        <!-- <v-expansion-panel>
-        <v-expansion-panel-content v-for="(item,i) in 5" :key="i">
-          <template v-slot:header>
-            <div>Item</div>
-          </template>
+      <v-row>
+        <v-col xs="12" sm="6" v-for="feedback in feedbacks" :key="feedback.id">
           <v-card>
-            <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+            <v-card-title>{{feedback.feedback}}</v-card-title>
+            <v-card-text>
+              <br />
+              <h5>Submitted by: {{feedback.name}} on {{feedback.dateSubmitted}}</h5>
+            </v-card-text>
+            <v-card-actions v-show="isAdmin">
+              <v-btn @click="deleteFeedback(feedback.id)">Delete</v-btn>
+            </v-card-actions>
           </v-card>
-        </v-expansion-panel-content>
-        </v-expansion-panel>-->
-
-        <v-expansion-panel>
-          <v-expansion-panel-content v-for="question in Questions" :key="question.title">
-            <template v-slot:header>
-              <div class="myFaq">{{question.title}}</div>
-            </template>
-            <v-card>
-              <v-card-text>{{question.answer}}</v-card-text>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-col>
+        </v-col>
+      </v-row>
     </v-row>
   </v-container>
 </template>
@@ -50,6 +42,7 @@ export default {
   data() {
     return {
       feedback: null,
+      feedbacks: [],
       formFeedback: null,
       Questions: [
         {
@@ -67,7 +60,12 @@ export default {
       ]
     };
   },
-  computed: {},
+  computed: {
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+      // return true;
+    }
+  },
   methods: {
     submitFeedback() {
       var today = new Date();
@@ -87,7 +85,8 @@ export default {
             feedback: this.feedback,
             name: firebase.auth().currentUser.displayName,
             userEmail: firebase.auth().currentUser.email,
-            uid: firebase.auth().currentUser.uid
+            uid: firebase.auth().currentUser.uid,
+            createdAt: Date.now()
           })
           .then(
             ((this.feedback = null), (this.formFeedback = "feedback submitted"))
@@ -108,9 +107,26 @@ export default {
         //   ((this.feedback = null), (this.formFeedback = "feedback submitted"))
         // );
       }
+    },
+    deleteFeedback(id) {
+      db.collection("feedback")
+        .doc(id)
+        .delete(); // This deletes it from the database
     }
   },
-  created() {}
+  created() {
+    db.collection("feedback")
+      .orderBy("createdAt")
+      .onSnapshot(snapshot => {
+        this.feedbacks = [];
+        snapshot.forEach(doc => {
+          // console.log(doc.data());
+          let feedbackItem = doc.data();
+          feedbackItem.id = doc.id;
+          this.feedbacks.push(feedbackItem);
+        });
+      });
+  }
 };
 </script>
 

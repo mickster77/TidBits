@@ -6,12 +6,8 @@ import Tidbits from '@/views/Tidbits'
 import ToDo from '@/views/ToDo'
 import Test from '@/views/Test'
 import FAQ from '@/views/FAQ'
-// import ViewRequest from '@/views/ViewRequest'
-// import ManageRequest from '@/views/ManageRequest'
-// import EditRequest from '@/views/EditRequest'
 import Burnlist from '@/views/Burnlist'
 import Letters from '@/views/Letters'
-// import FAQ from '@/views/FAQ'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -34,7 +30,6 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login,
-
     },
     {
       path: '/test',

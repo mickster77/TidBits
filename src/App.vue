@@ -35,6 +35,12 @@ export default {
   computed: {
     isDark() {
       return this.$vuetify.theme.dark ? "dark" : "light";
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
+    isMickster() {
+      return this.$store.getters.isAdmin;
     }
   }
 };

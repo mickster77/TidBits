@@ -45,7 +45,19 @@
       <v-row>
         <v-col cols="12">
           <h1>Tidbits by Tags</h1>
-          <v-btn rounded color="primary" @click="showTags=!showTags">TidBit Tags</v-btn>
+          <v-btn rounded color="primary" class="mx-3" @click="showTags=!showTags">TidBit Tags</v-btn>
+          <v-btn
+            rounded
+            color="success"
+            class="mx-3"
+            @click="sortTagsbyTotal=!sortTagsbyTotal"
+          >Sort by Number: {{sortTagsbyTotal}}</v-btn>
+          <!-- <v-btn
+            rounded
+            color="success"
+            class="mx-3"
+            @click="sortTagsAlpha=!sortTagsAlpha"
+          >Sort Alphabetically: {{sortTagsAlpha}}</v-btn>-->
         </v-col>
       </v-row>
       <v-row v-if="showTags">
@@ -159,6 +171,9 @@
                         :items="tidBitTagsUnique"
                       ></v-combobox>
                     </v-col>
+                    <v-col>
+                      <v-text-field label="Image URL" v-model="imageURL"></v-text-field>
+                    </v-col>
                     <v-col cols="12" my-3>
                       <v-textarea box label="Thoughts..." auto-grow v-model="thought"></v-textarea>
                     </v-col>
@@ -211,6 +226,8 @@ export default {
       movieDirector: null,
       // podcast
       podcastTitle: null,
+      // image
+      imageURL: null,
       // tooltips
       tidBitToolTip:
         "A tidbit is something that spurs a thought.  It can be a line from a book, a memorable quote, or an interaction with a friend.",
@@ -224,6 +241,8 @@ export default {
       showSources: false,
       selectedTags: [],
       showTags: false,
+      sortTagsAlpha: false,
+      sortTagsbyTotal: false,
 
       // random tidbit
       randomTid: 0,
@@ -339,7 +358,21 @@ export default {
           array.push(element);
         }
       });
-      return array;
+      if (this.sortTagsAlpha) {
+        return array.sort();
+      } else if (this.sortTagsbyTotal) {
+        return array.sort((a, b) => {
+          if (this.totalTags(a) > this.totalTags(b)) {
+            return -1;
+          } else if (this.totalTags(b) > this.totalTags(a)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+      } else {
+        return array;
+      }
     },
     // This array is all tidbits which match the currently selected tags
     getTidBitsbyTags() {
@@ -443,7 +476,10 @@ export default {
           movieDirector: this.movieDirector,
           bookTitle: this.bookTitle,
           bookAuthor: this.bookAuthor,
-          podcastTitle: this.podcastTitle
+          podcastTitle: this.podcastTitle,
+
+          // imageURL
+          imageURL: this.imageURL
         });
       this.nullDialogParams();
     },
@@ -464,7 +500,6 @@ export default {
       // console.log("test");
       console.table(this.randomTidBit.title);
       // console.log(this.randomTidBit.title);
-
       // console.log(this.allTidBits[0].title);
       // console.table(this.allTidBits);
       // console.log("totoal tidbits: " + this.$store.getters.totalTidBits);

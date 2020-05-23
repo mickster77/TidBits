@@ -45,11 +45,9 @@ import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
-
-
 let app = ''
 // This is a git test.
-firebase.auth().onAuthStateChanged(() => {
+firebase.auth().onAuthStateChanged((firebaseUser) => {
   if (!app) {
     app = new Vue({
       vuetify,
@@ -57,6 +55,11 @@ firebase.auth().onAuthStateChanged(() => {
       store: store,
       render: h => h(App)
     }).$mount('#app')
+  }
+  if (firebaseUser) {
+    store.dispatch('autoSignIn', firebaseUser)
+  } else {
+    store.dispatch('userSignOut', firebaseUser)
   }
 });
 
