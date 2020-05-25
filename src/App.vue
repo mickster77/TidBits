@@ -29,7 +29,9 @@ export default {
   },
   methods: {
     changeTheme() {
-      this.$vuetify.them.dark = false;
+      if (this.$vuetify.theme.dark == true) {
+        this.$vuetify.theme.dark = false;
+      } else this.$vuetify.theme.dark = true;
     }
   },
   computed: {

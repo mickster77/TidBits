@@ -2,12 +2,15 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/auth/Login'
 import Signup from '@/views/auth/Signup'
+import Home from '@/views/Home'
 import Tidbits from '@/views/Tidbits'
 import ToDo from '@/views/ToDo'
 import Test from '@/views/Test'
 import FAQ from '@/views/FAQ'
 import Burnlist from '@/views/Burnlist'
 import Letters from '@/views/Letters'
+import Weight from '@/views/Weight'
+import UnderConstruction from '@/views/UnderConstruction'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -18,7 +21,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      name: 'Home',
+      component: Home
     },
 
     {
@@ -66,8 +70,21 @@ const router = new Router({
       meta: {
         requiresAuth: true,
       },
-    },
 
+    },
+    {
+      path: '/underconstruction',
+      name: 'UnderConstruction',
+      component: UnderConstruction,
+    },
+    {
+      path: '/weight',
+      name: 'Weight',
+      component: Weight,
+      meta: {
+        requiresAuth: true,
+      },
+    },
   ]
 })
 

@@ -1,10 +1,26 @@
 <template>
   <div>
+    <v-container fluid>
+      <v-row justify-center>
+        <v-col cols="12">
+          <v-card>
+            <v-card-title class="display-2">TidBits</v-card-title>
+            <v-card-subtitle
+              class="headline"
+            >The TidBits app is a way to annote small blurbs of information, called TidBits. TidBits typically have a source, such as a book, podcast or even passing conversation. TidBits also can be tagged, which allows looking over all TidBits related to a certain topic.</v-card-subtitle>
+            <v-card-subtitle
+              class="headline"
+            >Use the plus button in the corner to create a new Tidbits. The other controls below allow selective viewing of TidBits.</v-card-subtitle>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <!-- all tidbits -->
     <v-container>
       <v-row>
         <v-col>
-          <h1>All Tidbits</h1>
+          <h1>All TidBits</h1>
           <v-btn rounded color="primary" @click="showAll=!showAll">Show All</v-btn>
         </v-col>
       </v-row>
@@ -19,7 +35,7 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <h1>Tidbits by Source</h1>
+          <h1>TidBits by Source</h1>
           <v-btn rounded color="primary" @click="showSources=!showSources">TidBit Sources</v-btn>
         </v-col>
       </v-row>
@@ -44,7 +60,7 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <h1>Tidbits by Tags</h1>
+          <h1>TidBits by Tags</h1>
           <v-btn rounded color="primary" class="mx-3" @click="showTags=!showTags">TidBit Tags</v-btn>
           <v-btn
             rounded
@@ -81,7 +97,7 @@
     <v-container>
       <v-row>
         <v-col>
-          <h1>Random Tidbit</h1>
+          <h1>Random TidBits</h1>
           <v-btn rounded color="primary" @click="toggleRandomTidBit">Random Tidbit</v-btn>
         </v-col>
       </v-row>
@@ -91,6 +107,7 @@
         </v-col>
       </v-row>
     </v-container>
+
     <!-- Add TidBit -->
     <v-container align-center fluid>
       <v-row row justify-center>
@@ -182,11 +199,54 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn color="primary" text @click="cancel">Cancel</v-btn>
+                <v-btn color="primary" text @click="save">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12" md="3">
+          <v-card class="ma-1">
+            <v-card-title>Sidebar</v-card-title>
+
+            <v-card class="mx-auto" max-width="500">
+              <v-list>
+                <v-list-item-group v-model="model">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>All TidBits</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>By Source</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>By Tags</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>Random</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" md="9">
+          <v-card class="ma-1">
+            <v-card-title>Main</v-card-title>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -246,7 +306,28 @@ export default {
 
       // random tidbit
       randomTid: 0,
-      showRandomTidbit: false
+      showRandomTidbit: false,
+
+      // side bar
+      items: [
+        {
+          icon: "mdi-inbox",
+          text: "All TidBits"
+        },
+        {
+          icon: "mdi-star",
+          text: "By Source"
+        },
+        {
+          icon: "mdi-send",
+          text: "By Tags"
+        },
+        {
+          icon: "mdi-email-open",
+          text: "Random"
+        }
+      ],
+      model: 1
     };
   },
   created() {

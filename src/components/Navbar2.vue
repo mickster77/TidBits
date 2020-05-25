@@ -92,6 +92,11 @@ export default {
         //   link: { path: "/test" }
         // },
         {
+          title: "Weight",
+          icon: "mdi-scale",
+          link: { name: "Weight" }
+        },
+        {
           title: "Letters",
           icon: "mdi-book-multiple",
           link: { name: "Letters" }
@@ -100,27 +105,27 @@ export default {
           title: "FAQ",
           icon: "mdi-frequently-asked-questions",
           link: { name: "FAQ" }
-        },
-        {
-          title: "Blog",
-          icon: "mdi-boom-gate-down-outline",
-          link: { name: "FAQ" }
-        },
-        {
-          title: "Library",
-          icon: "mdi-boom-gate-down-outline",
-          link: { name: "FAQ" }
-        },
-        {
-          title: "Forum",
-          icon: "mdi-boom-gate-down-outline",
-          link: { name: "FAQ" }
-        },
-        {
-          title: "Voice Notes",
-          icon: "mdi-boom-gate-down-outline",
-          link: { name: "FAQ" }
         }
+        // {
+        //   title: "Blog",
+        //   icon: "mdi-boom-gate-down-outline",
+        //   link: { name: "UnderConstruction" }
+        // },
+        // {
+        //   title: "Library",
+        //   icon: "mdi-boom-gate-down-outline",
+        //   link: { name: "UnderConstruction" }
+        // },
+        // {
+        //   title: "Forum",
+        //   icon: "mdi-boom-gate-down-outline",
+        //   link: { name: "UnderConstruction" }
+        // },
+        // {
+        //   title: "Voice Notes",
+        //   icon: "mdi-boom-gate-down-outline",
+        //   link: { name: "UnderConstruction" }
+        // }
       ],
       links: [
         {

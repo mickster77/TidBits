@@ -19,52 +19,61 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-card>
+            <v-container>
+              <v-row>
+                <v-col>
+                  <div>
+                    <line-chart
+                      :chartData="myChartData"
+                      :options="chartOptions"
+                      :chartColors="myChartColors"
+                      label="Positive"
+                    />
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <div>
+                    <scatter-chart
+                      :chartData="myChartData"
+                      :options="chartOptions"
+                      :chartColors="myChartColors"
+                      label="Positive"
+                    />
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import firebase from "firebase"; // needed for cloud storage
-import db from "@/firebase/init";
-// import TidBit from "@/components/TidBit";
+import LineChart from "@/components/LineChart";
+import ScatterChart from "@/components/ScatterChart";
+
+// import db from "@/firebase/init";
 
 export default {
   name: "Test",
-  // components: { TidBit },
+  components: {
+    LineChart,
+    ScatterChart
+  },
   data() {
     return {
       myData: "data",
-      tidBits: [],
-      tidBit: {
-        title: "My Title",
-        source: "My Source",
-        thought: "My Thoughts",
-        tags: ["tag 1", "tag 2"],
-        nowDate: Date.now(),
-        id: "12345",
-        youtubeSrc: "https://www.youtube.com/embed/paNuap1mw3A",
-        imgSrc: null
-      },
-      tidBitTwo: {
-        title: "My Title Two",
-        source: "My Source Two",
-        thought: "My Thoughts Two",
-        tags: ["tag 3", "tag 2"],
-        nowDate: Date.now(),
-        id: "23456",
-        youtubeSrc: null,
-        imgSrc: "https://cdn.vuetifyjs.com/images/cards/forest.jpg"
-      },
-      tidBitThree: {
-        title: "My Title Three",
-        source: "My Source Three",
-        thought: "My Thoughts Three",
-        tags: ["tag 3", "tag 5"],
-        nowDate: Date.now(),
-        id: "34567",
-        youtubeSrc: null,
-        imgSrc: "https://images.app.goo.gl/JaTQzQTo9EFGZUu8A"
-      },
       // file input
+
       file: null,
       rules: [
         value =>
@@ -72,28 +81,37 @@ export default {
           value.size < 2000000 ||
           "Avatar size should be less than 2 MB!"
       ],
-      selectedFile: null
+      selectedFile: null,
+
+      // chart
+      myChartData: [
+        {
+          date: "2018",
+          value: 50
+        },
+        {
+          date: "2019",
+          value: 60
+        },
+        {
+          date: "2020",
+          value: 70
+        }
+      ],
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false
+      },
+      myChartColors: {
+        borderColor: "#077187",
+        pointBorderColor: "#0E1428",
+        pointBackgroundColor: "#AFD6AC",
+        backgroundColor: "#74A57F"
+      }
     };
   },
-  created() {
-    db.collection("TidBits")
-      //   .doc("T9sYDh8nUMgknDTIXZVmzeTORxD3")
-      .doc("rzVz2xWp03QloC8HEkXQ2tpyWb82")
-      .collection("TidBits")
-      .orderBy("nowDate")
-      .onSnapshot(snapshot => {
-        snapshot.forEach(doc => {
-          let TidBit = doc.data();
-          let id = doc.id;
-          TidBit.id = id;
-          this.tidBits.push(TidBit);
-        });
-      });
-  },
+  created() {},
   methods: {
-    printTidBits() {
-      // console.table(this.tidBitTags);
-    },
     onFileSelected(event) {
       console.log(event);
       this.selectedFile = event;
@@ -139,6 +157,8 @@ export default {
           // storage/object-not-found
         });
     }
+
+    // Chart js methods
   },
   computed: {
     displayName() {

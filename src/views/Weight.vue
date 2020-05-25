@@ -1,0 +1,364 @@
+<template>
+  <div>
+    <!-- headline -->
+    <v-container fluid>
+      <v-row justify-center>
+        <v-col>
+          <v-card>
+            <v-card-title primary-title class="justify-center display-3">Weight App</v-card-title>
+            <v-container fluid>
+              <v-row>
+                <v-col>
+                  <v-sparkline
+                    :value="computedChartData"
+                    :gradient="gradient"
+                    :smooth="radius || false"
+                    :padding="padding"
+                    :line-width="width"
+                    :stroke-linecap="lineCap"
+                    :gradient-direction="gradientDirection"
+                    :fill="fill"
+                    :type="type"
+                    :auto-line-width="autoLineWidth"
+                    auto-draw
+                  ></v-sparkline>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- add weight   -->
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12">
+          <v-card class="ma-1">
+            <v-card-title class="justify-center">New Weight</v-card-title>
+            <v-container>
+              <v-row>
+                <v-col xs="12" md="6">
+                  <v-text-field
+                    v-model="weight"
+                    append-outer-icon="mdi-plus"
+                    @click:append-outer="addWeight"
+                    @keydown.enter="addWeight"
+                    @click:prepend="showCalendar=!showCalendar"
+                    label="add weight"
+                    prepend-icon="mdi-calendar"
+                  >Test</v-text-field>
+                </v-col>
+                <v-col xs="12" md="6">
+                  <v-chip>
+                    {{selectedDate}}
+                    <v-icon right @click="nextDate">mdi-plus</v-icon>
+                  </v-chip>
+                </v-col>
+              </v-row>
+              <v-row v-show="showCalendar">
+                <v-col>
+                  <v-date-picker v-model="picker"></v-date-picker>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-btn @click="showChart=!showChart">Show Graphs</v-btn>
+        </v-col>
+        <v-col>
+          <v-btn @click="showData=!showData">Show Data</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- debug   -->
+    <v-container v-show="false">
+      <v-row>
+        <v-col>
+          <v-card>
+            <v-card-title>Debug</v-card-title>
+            <v-card-text v-show="showDebug">
+              <p>model = {{model}}</p>
+              <p>picker = {{picker}}</p>
+              <p>momentDater = {{momentDate}}</p>
+
+              <p>showCal = {{showCalendar}}</p>
+              <p>computedWeights = {{computedWeights}}</p>
+              <p>computedDates = {{computedDates}}</p>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="success" @click="showDebug=!showDebug">show</v-btn>
+              <v-btn color="success" @click="printWeights">print</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- charts   -->
+    <v-container fluid>
+      <v-row v-if="showChart">
+        <v-col cols="12">
+          <line-chart
+            :chartData="computedChartData"
+            :chartLabels="computedChartLabels"
+            :options="chartOptions"
+            label="All Time Weights"
+          />
+        </v-col>
+      </v-row>
+      <v-row v-if="showChart">
+        <v-col xs="12" md="6">
+          <line-chart
+            :chartData="computedChartDataMonth"
+            :chartLabels="computedChartLabelsMonth"
+            :options="chartMonthOptions"
+            label="Last 30 Measurements"
+          />
+        </v-col>
+        <v-col xs="12" md="6">
+          <line-chart
+            :chartData="computedChartDataWeek"
+            :chartLabels="computedChartLabelsWeek"
+            :options="chartMonthOptions"
+            label="Last 7 Measurements"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- charts   -->
+    data
+  </div>
+</template>
+<script>
+// import Chart from "chart.js";
+import moment from "moment";
+import db from "@/firebase/init"; //needed for database call
+import firebase from "firebase"; // needed for user auth
+import LineChart from "@/components/LineChart";
+
+// Sparkline
+const gradients = [
+  ["#222"],
+  ["#42b3f4"],
+  ["red", "orange", "yellow"],
+  ["purple", "violet"],
+  ["#00c6ff", "#F0F", "#FF0"],
+  ["#f72047", "#ffd200", "#1feaea"]
+];
+
+export default {
+  name: "Weight",
+  components: {
+    LineChart
+  },
+  //   watch: {
+  //     computedWeights() {
+  //       this.$data._chart.update();
+  //     }
+  //   },
+  data() {
+    return {
+      weight: null,
+      model: null,
+      picker: null,
+      showCalendar: false,
+      weights: [],
+
+      // Debug
+      showDebug: true,
+
+      //sparkline
+      width: 2,
+      radius: 10,
+      padding: 8,
+      lineCap: "round",
+      gradient: gradients[5],
+      gradientDirection: "top",
+      gradients,
+      fill: false,
+      type: "trend",
+      autoLineWidth: false,
+
+      // chart
+
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                unit: "month"
+              }
+            }
+          ]
+        }
+      },
+      chartMonthOptions: {
+        responsive: true,
+        maintainAspectRatio: false
+      },
+      showChart: false,
+      showData: false
+    };
+  },
+
+  async created() {
+    this.weights = [];
+    let newWeights = [];
+    db.collection("UserOwned")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("Weight")
+      //   .orderBy("date", "desc")
+      .orderBy("date")
+
+      .onSnapshot(snapshot => {
+        newWeights = [];
+        snapshot.forEach(doc => {
+          newWeights.push({
+            weight: doc.data().weight,
+            id: doc.id,
+            date: doc.data().date
+          });
+        });
+        this.weights = newWeights;
+      });
+  },
+  computed: {
+    momentDate() {
+      return moment(this.picker).format("l");
+    },
+    selectedDate() {
+      let myDate = null;
+      if (this.picker) {
+        myDate = moment(this.picker).format("YYYY-MM-DD");
+      } else {
+        myDate = moment(Date.now()).format("YYYY-MM-DD");
+      }
+      return myDate;
+    },
+    computedWeights() {
+      let justWeights = [];
+      this.weights.forEach(element => {
+        justWeights.push(element.weight);
+      });
+      return justWeights.map(Number).reverse();
+    },
+    computedDates() {
+      let justDates = [];
+      this.weights.forEach(element => {
+        justDates.push(element.date);
+      });
+      return justDates.reverse();
+    },
+    computedChartData() {
+      let justWeights = [];
+      this.weights.forEach(element => {
+        justWeights.push(element.weight);
+      });
+      return justWeights.map(Number);
+    },
+    computedChartLabels() {
+      let justDates = [];
+      this.weights.forEach(element => {
+        justDates.push(element.date);
+      });
+      return justDates;
+    },
+    computedChartDataMonth() {
+      let justWeights = [];
+      this.weights.forEach(element => {
+        justWeights.push(element.weight);
+      });
+      const length = justWeights.length;
+      return justWeights.map(Number).slice(length - 30, length);
+    },
+    computedChartLabelsMonth() {
+      let justDates = [];
+      this.weights.forEach(element => {
+        justDates.push(element.date);
+      });
+      const length = justDates.length;
+      return justDates.slice(length - 30, length);
+    },
+    computedChartDataWeek() {
+      let justWeights = [];
+      this.weights.forEach(element => {
+        justWeights.push(element.weight);
+      });
+      const length = justWeights.length;
+      return justWeights.map(Number).slice(length - 7, length);
+    },
+    computedChartLabelsWeek() {
+      let justDates = [];
+      this.weights.forEach(element => {
+        justDates.push(element.date);
+      });
+      const length = justDates.length;
+      return justDates.slice(length - 7, length);
+    }
+  },
+  methods: {
+    sendMessage() {
+      let uid = this.$store.getters.uid;
+      //   let userName = this.$store.getters.userDisplayName;
+      alert(uid);
+    },
+
+    nextDate() {
+      if (this.picker) {
+        this.picker = moment(this.picker)
+          .add(1, "days")
+          .format("YYYY-MM-DD");
+      } else {
+        this.picker = moment(Date.now())
+          .add(1, "days")
+          .format("YYYY-MM-DD");
+      }
+    },
+
+    addWeight() {
+      let uid = this.$store.getters.uid;
+
+      if (this.weight !== "") {
+        db.collection("UserOwned")
+          .doc(uid)
+          .collection("Weight")
+          .add({
+            weight: this.weight,
+            created_at: Date.now(),
+            date: this.selectedDate
+          })
+          .then(
+            ((this.weight = null),
+            (this.picker = moment(this.picker)
+              .add(1, "days")
+              .format("YYYY-MM-DD")))
+          )
+          .catch(error => {
+            alert(error);
+          });
+      } else {
+        alert("Please enter a weight");
+      }
+    },
+    deleteWeight(id) {
+      db.collection("UserOwned")
+        .doc(firebase.auth().currentUser.uid)
+        .collection("Weight")
+        .doc(id) // Gets the doc of a specific id
+        .delete(); // This deletes it from the database
+    },
+    printWeights() {
+      console.table(this.weights);
+      console.log(this.computedWeights);
+      console.log(this.computedDates);
+      this.showChart = !this.showChart;
+    }
+  }
+};
+</script>
+
+<style>
+</style>

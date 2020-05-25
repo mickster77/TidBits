@@ -122,7 +122,7 @@ export const store = new Vuex.Store({
         userEmail(state) {
             return state.user.email
         },
-        userID(state) {
+        uid(state) {
             return state.user.uid
         },
 

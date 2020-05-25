@@ -6,22 +6,7 @@
           <v-card-title class="fix">{{tidBit.title}}</v-card-title>
           <v-img v-if="tidBit.imageURL" :src="tidBit.imageURL"></v-img>
         </v-col>
-        <!-- <v-col cols="12">
-          <v-img v-if="tidBit.imgSrc" :src="tidBit.imgSrc" aspect-ratio="2.75"></v-img>
-        </v-col>-->
-        <!-- <v-col cols="12">
-          <div class="iframe-container">
-            <iframe
-              width="100%"
-              height="100%"
-              v-if="tidBit.youtubeSrc"
-              :src="tidBit.youtubeSrc"
-              frameborder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-          </div>
-        </v-col>-->
+
         <v-col cols="12">
           <v-card-text class="font-italic">{{tidBit.source}}</v-card-text>
         </v-col>
