@@ -29,13 +29,31 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- add weight   -->
-    <v-container fluid>
+    <!-- add current weight   -->
+    <v-container secondary>
+      <v-row>
+        <v-col>
+          <h1 class="text-center">Weigh In ({{currentWeight}})</h1>
+          <v-row>
+            <v-col cols="12">
+              <Slider :baseWeight="currentWeight" />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- add past weight   -->
+    <v-container>
       <v-row>
         <v-col cols="12">
-          <v-card class="ma-1">
-            <v-card-title class="justify-center">New Weight</v-card-title>
-            <v-container>
+          <v-card>
+            <v-card-title class="justify-center">
+              Add Past Weight
+              <span>
+                <v-btn class="ml-4" @click="showCalendar=!showCalendar">Show</v-btn>
+              </span>
+            </v-card-title>
+            <v-container v-show="showCalendar">
               <v-row>
                 <v-col xs="12" md="6">
                   <v-text-field
@@ -49,25 +67,11 @@
                   >Test</v-text-field>
                 </v-col>
                 <v-col xs="12" md="6">
-                  <v-chip>
-                    {{selectedDate}}
-                    <v-icon right @click="nextDate">mdi-plus</v-icon>
-                  </v-chip>
-                </v-col>
-              </v-row>
-              <v-row v-show="showCalendar">
-                <v-col>
                   <v-date-picker v-model="picker"></v-date-picker>
                 </v-col>
               </v-row>
             </v-container>
           </v-card>
-        </v-col>
-        <v-col>
-          <v-btn @click="showChart=!showChart">Show Graphs</v-btn>
-        </v-col>
-        <v-col>
-          <v-btn @click="showData=!showData">Show Data</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -95,17 +99,17 @@
       </v-row>
     </v-container>
     <!-- charts   -->
-    <v-container fluid>
-      <v-row v-if="showChart">
-        <v-col cols="12">
-          <line-chart
-            :chartData="computedChartData"
-            :chartLabels="computedChartLabels"
-            :options="chartOptions"
-            label="All Time Weights"
-          />
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-btn @click="showChart=!showChart">Show Graphs</v-btn>
+        </v-col>
+        <v-col>
+          <v-btn @click="showData=!showData">Show Data</v-btn>
         </v-col>
       </v-row>
+    </v-container>
+    <v-container fluid>
       <v-row v-if="showChart">
         <v-col xs="12" md="6">
           <line-chart
@@ -124,8 +128,18 @@
           />
         </v-col>
       </v-row>
+      <v-row v-if="showChart">
+        <v-col cols="12">
+          <line-chart
+            :chartData="computedChartData"
+            :chartLabels="computedChartLabels"
+            :options="chartOptions"
+            label="All Time Weights"
+          />
+        </v-col>
+      </v-row>
     </v-container>
-    <!-- charts   -->
+    <!-- data   -->
     <v-container>
       <v-row v-show="showData">
         <v-col>
@@ -160,6 +174,7 @@ import moment from "moment";
 import db from "@/firebase/init"; //needed for database call
 import firebase from "firebase"; // needed for user auth
 import LineChart from "@/components/LineChart";
+import Slider from "@/components/Weight/Slider";
 
 // Sparkline
 const gradients = [
@@ -174,7 +189,8 @@ const gradients = [
 export default {
   name: "Weight",
   components: {
-    LineChart
+    LineChart,
+    Slider
   },
   //   watch: {
   //     computedWeights() {
@@ -203,6 +219,12 @@ export default {
       fill: false,
       type: "trend",
       autoLineWidth: false,
+
+      // Weight Slider
+      adjustWeight: 0,
+      step: 0.1,
+      min: -10,
+      max: 10,
 
       // chart
 
@@ -286,6 +308,10 @@ export default {
         myDate = moment(Date.now()).format("YYYY-MM-DD");
       }
       return myDate;
+    },
+    currentWeight() {
+      let weightString = this.weights[0].weight;
+      return Number(weightString);
     },
     computedWeights() {
       let justWeights = [];
@@ -371,7 +397,7 @@ export default {
 
     addWeight() {
       let uid = this.$store.getters.uid;
-
+      this.picker = moment(Date.now()).format("YYYY-MM-DD");
       if (this.weight !== "") {
         db.collection("UserOwned")
           .doc(uid)

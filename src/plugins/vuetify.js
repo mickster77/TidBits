@@ -30,7 +30,7 @@ export default new Vuetify({
       },
       dark: {
         primary: "#0A2E36",
-        secondary: '#036D19',
+        secondary: '#424242',
         accent: '#27FB6B',
         error: colors.red,
         info: '#09A129',
