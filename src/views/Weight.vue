@@ -10,7 +10,7 @@
               <v-row>
                 <v-col>
                   <v-sparkline
-                    :value="computedChartData"
+                    :value="computedWeights"
                     :gradient="gradient"
                     :smooth="radius || false"
                     :padding="padding"
@@ -119,14 +119,39 @@
           <line-chart
             :chartData="computedChartDataWeek"
             :chartLabels="computedChartLabelsWeek"
-            :options="chartMonthOptions"
+            :options="chartDaysOptions"
             label="Last 7 Measurements"
           />
         </v-col>
       </v-row>
     </v-container>
     <!-- charts   -->
-    data
+    <v-container>
+      <v-row v-show="showData">
+        <v-col>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">Date</th>
+                  <th class="text-left">Weight</th>
+                  <th class="text-left">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in weights" :key="item.id">
+                  <td>{{ item.date }}</td>
+                  <td>{{ item.weight }}</td>
+                  <td>
+                    <v-icon @click="deleteWeight(item.id)">mdi-delete</v-icon>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 <script>
@@ -197,7 +222,31 @@ export default {
       },
       chartMonthOptions: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                unit: "week"
+              }
+            }
+          ]
+        }
+      },
+      chartDaysOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                unit: "day"
+              }
+            }
+          ]
+        }
       },
       showChart: false,
       showData: false
@@ -210,8 +259,8 @@ export default {
     db.collection("UserOwned")
       .doc(firebase.auth().currentUser.uid)
       .collection("Weight")
-      //   .orderBy("date", "desc")
-      .orderBy("date")
+      .orderBy("date", "desc")
+      //   .orderBy("date")
 
       .onSnapshot(snapshot => {
         newWeights = [];
@@ -271,32 +320,34 @@ export default {
       this.weights.forEach(element => {
         justWeights.push(element.weight);
       });
-      const length = justWeights.length;
-      return justWeights.map(Number).slice(length - 30, length);
+      return justWeights
+        .map(Number)
+        .slice(0, 30)
+        .reverse();
     },
     computedChartLabelsMonth() {
       let justDates = [];
       this.weights.forEach(element => {
         justDates.push(element.date);
       });
-      const length = justDates.length;
-      return justDates.slice(length - 30, length);
+      return justDates.slice(0, 30).reverse();
     },
     computedChartDataWeek() {
       let justWeights = [];
       this.weights.forEach(element => {
         justWeights.push(element.weight);
       });
-      const length = justWeights.length;
-      return justWeights.map(Number).slice(length - 7, length);
+      return justWeights
+        .map(Number)
+        .slice(0, 7)
+        .reverse();
     },
     computedChartLabelsWeek() {
       let justDates = [];
       this.weights.forEach(element => {
         justDates.push(element.date);
       });
-      const length = justDates.length;
-      return justDates.slice(length - 7, length);
+      return justDates.slice(0, 7).reverse();
     }
   },
   methods: {
