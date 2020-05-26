@@ -10,6 +10,8 @@ import FAQ from '@/views/FAQ'
 import Burnlist from '@/views/Burnlist'
 import Letters from '@/views/Letters'
 import Weight from '@/views/Weight'
+import Workout from '@/views/Workout'
+
 import UnderConstruction from '@/views/UnderConstruction'
 import firebase from 'firebase'
 
@@ -19,6 +21,22 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/workout',
+      name: 'Workout',
+      component: Workout,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/weight',
+      name: 'Weight',
+      component: Weight,
+      meta: {
+        requiresAuth: true,
+      },
+    },
     {
       path: '/',
       name: 'Home',
@@ -77,14 +95,7 @@ const router = new Router({
       name: 'UnderConstruction',
       component: UnderConstruction,
     },
-    {
-      path: '/weight',
-      name: 'Weight',
-      component: Weight,
-      meta: {
-        requiresAuth: true,
-      },
-    },
+
   ]
 })
 

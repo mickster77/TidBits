@@ -55,7 +55,7 @@
 
     <v-app-bar app color="primary" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>TidBits</v-toolbar-title>
+      <v-toolbar-title @click="goHome">TidBits</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn color="warning" v-if="user" @click="logout">signOut</v-btn>
     </v-app-bar>
@@ -95,6 +95,11 @@ export default {
           title: "Weight",
           icon: "mdi-scale",
           link: { name: "Weight" }
+        },
+        {
+          title: "Workout",
+          icon: "mdi-weight-lifter",
+          link: { name: "Workout" }
         },
         {
           title: "Letters",
@@ -145,7 +150,7 @@ export default {
   },
   methods: {
     goHome() {
-      this.$router.push({ name: "Tidbits" });
+      this.$router.push({ name: "Home" });
     },
 
     logout() {
