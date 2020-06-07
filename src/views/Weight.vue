@@ -173,7 +173,7 @@
 import moment from "moment";
 import db from "@/firebase/init"; //needed for database call
 import firebase from "firebase"; // needed for user auth
-import LineChart from "@/components/LineChart";
+import LineChart from "@/components/Charts/LineChart";
 import Slider from "@/components/Weight/Slider";
 
 // Sparkline
@@ -240,6 +240,12 @@ export default {
               }
             }
           ]
+        },
+        legend: {
+          labels: {
+            // This more specific font property overrides the global property
+            fontColor: "#FFFFFF"
+          }
         }
       },
       chartMonthOptions: {
@@ -254,6 +260,12 @@ export default {
               }
             }
           ]
+        },
+        legend: {
+          labels: {
+            // This more specific font property overrides the global property
+            fontColor: "#FFFFFF"
+          }
         }
       },
       chartDaysOptions: {
@@ -268,6 +280,12 @@ export default {
               }
             }
           ]
+        },
+        legend: {
+          labels: {
+            // This more specific font property overrides the global property
+            fontColor: "#FFFFFF"
+          }
         }
       },
       showChart: false,

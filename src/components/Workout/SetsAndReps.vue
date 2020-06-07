@@ -1,70 +1,68 @@
 <template>
-  <div>
-    <!-- headline -->
-    <v-container fluid>
-      <v-row>
-        <v-col>
-          <v-card>
-            <v-card-title primary-title class="justify-center display-3">Workout App</v-card-title>
-            <v-container>
-              <v-row>
-                <v-col align="center">
-                  <v-btn-toggle v-model="workoutType" tile group>
-                    <v-btn value="7x3s">7x3s</v-btn>
-                    <v-btn value="Metcon">Metcon</v-btn>
-                    <v-btn value="1 Rep Max">1 Rep Max</v-btn>
-                    <v-btn value="Sets and Reps">Sets and Reps</v-btn>
-                  </v-btn-toggle>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-container class="mu-1">
+    <v-row>
+      <v-col>{{workoutType}}</v-col>
+      <!--  log workout  -->
+      <v-container grid-list-lg>
+        <v-row>
+          <v-col>
+            <v-dialog v-model="dialog" persistent max-width="600px">
+              <template v-slot:activator="{ on }">
+                <v-btn color="primary" dark v-on="on" class="mr-4">Log New Workout</v-btn>
+              </template>
+              <LogWorkout v-on:closeDialog="dialog=false"></LogWorkout>
+            </v-dialog>
+          </v-col>
+        </v-row>
+      </v-container>
 
-    <!-- Metcon -->
-    <v-container v-if="workoutType=='Metcon'">
-      <v-row>
-        <v-col>{{workoutType}}</v-col>
-      </v-row>
-    </v-container>
-
-    <!-- 7x3s -->
-    <!-- <v-container v-if="workoutType=='7x3s'">
-      <v-row>
-        <v-col>{{workoutType}}</v-col>
-      </v-row>
-    </v-container>-->
-
-    <SevenByThree v-if="workoutType=='7x3s'" />
-
-    <!-- One Rep Max -->
-    <v-container v-if="workoutType=='1 Rep Max'">
-      <v-row>
-        <v-col>{{workoutType}}</v-col>
-      </v-row>
-    </v-container>
-
-    <!-- Sets and Reps -->
-    <SetsAndReps v-if="workoutType=='Sets and Reps'" />
-  </div>
+      <!-- data table  -->
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-data-table
+              :headers="headers"
+              :items="workouts"
+              :single-expand="singleExpand"
+              :expanded.sync="expanded"
+              item-key="title"
+              show-expand
+              class="elevation-1"
+            >
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-toolbar-title>Workout Log</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-switch v-model="singleExpand" label="Single expand" class="mt-2"></v-switch>
+                </v-toolbar>
+              </template>
+              <template v-slot:expanded-item="{ headers }">
+                <td :colspan="headers.length">
+                  <span>not completed...</span>
+                </td>
+              </template>
+              <template v-slot:item.delete="{item}">
+                <v-icon @click="deleteWorkout(item.id)">mdi-delete</v-icon>
+              </template>
+              <template v-slot:item.sets="{item}">
+                <td>{{item.notes}}</td>
+              </template>
+            </v-data-table>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-// import moment from "moment";
 import db from "@/firebase/init"; //needed for database call
 import firebase from "firebase"; // needed for user auth
-// import LogWorkout from "@/components/Workout/LogWorkout.vue";
-import SetsAndReps from "@/components/Workout/SetsAndReps.vue";
-import SevenByThree from "@/components/Workout/SevenByThree.vue";
+import LogWorkout from "@/components/Workout/LogWorkout.vue";
 
 export default {
-  name: "Workout",
   components: {
-    // LogWorkout,
-    SetsAndReps,
-    SevenByThree
+    LogWorkout
   },
   data() {
     return {

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import firebase from "firebase"; // needed for user auth
 import db from "@/firebase/init";
 import letters from "@/store/modules/letters";
+import logWorkout from "@/store/modules/logWorkout";
 import router from '@/router'
 
 
@@ -13,6 +14,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     modules: {
         letters: letters,
+        logWorkout: logWorkout,
+
     },
     state: {
         TidBits: [],

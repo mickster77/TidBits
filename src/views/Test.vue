@@ -58,8 +58,8 @@
 
 <script>
 import firebase from "firebase"; // needed for cloud storage
-import LineChart from "@/components/LineChart";
-import ScatterChart from "@/components/ScatterChart";
+import LineChart from "@/components/Charts/LineChart";
+import ScatterChart from "@/components/Charts/ScatterChart";
 
 // import db from "@/firebase/init";
 
