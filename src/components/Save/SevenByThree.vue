@@ -128,8 +128,6 @@
               :options="chartOptions"
               :label="deadLiftWorkouts[0].date"
               :label2="deadLiftWorkouts[1].date"
-              :workouts="workouts"
-              exercise="Deadlift"
             />
           </v-card-text>
         </v-card>
@@ -146,8 +144,6 @@
               :chartLabels="pressWorkouts[0].reps"
               :options="chartOptions"
               :label="pressWorkouts[0].date"
-              :workouts="workouts"
-              exercise="Press"
             />
           </v-card-text>
         </v-card>
@@ -162,7 +158,7 @@ import db from "@/firebase/init"; //needed for database call
 import firebase from "firebase"; // needed for user auth
 
 // import LineChart from "@/components/Charts/LineChart";
-import LineChart from "@/components/Workout/WorkoutLineChart";
+import LineChart from "@/components/Save/LineChart";
 
 // import WorkoutLineChart from "@/components/Workout/WorkoutLineChart.vue";
 import WorkoutDataTable from "@/components/Workout/WorkoutDataTable.vue";

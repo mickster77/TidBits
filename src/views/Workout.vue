@@ -12,8 +12,7 @@
                   <v-btn-toggle v-model="workoutType" tile group>
                     <v-btn value="7x3s">7x3s</v-btn>
                     <v-btn value="Metcon">Metcon</v-btn>
-                    <v-btn value="1 Rep Max">1 Rep Max</v-btn>
-                    <v-btn value="Sets and Reps">Sets and Reps</v-btn>
+                    <v-btn value="Sets and Reps">Misc</v-btn>
                   </v-btn-toggle>
                 </v-col>
               </v-row>
@@ -26,7 +25,9 @@
     <!-- Metcon -->
     <v-container v-if="workoutType=='Metcon'">
       <v-row>
-        <v-col>{{workoutType}}</v-col>
+        <v-col>
+          <Metcon />
+        </v-col>
       </v-row>
     </v-container>
 
@@ -58,13 +59,15 @@ import firebase from "firebase"; // needed for user auth
 // import LogWorkout from "@/components/Workout/LogWorkout.vue";
 import SetsAndReps from "@/components/Workout/SetsAndReps.vue";
 import SevenByThree from "@/components/Workout/SevenByThree.vue";
+import Metcon from "@/components/Workout/Metcon.vue";
 
 export default {
   name: "Workout",
   components: {
     // LogWorkout,
     SetsAndReps,
-    SevenByThree
+    SevenByThree,
+    Metcon
   },
   data() {
     return {
