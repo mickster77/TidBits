@@ -53,7 +53,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title @click="goHome">TidBits</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -102,6 +102,11 @@ export default {
           link: { name: "Workout" }
         },
         {
+          title: "ChoreBoard",
+          icon: "mdi-android-debug-bridge",
+          link: { name: "ChoreBoard" }
+        },
+        {
           title: "Letters",
           icon: "mdi-book-multiple",
           link: { name: "Letters" }
@@ -111,11 +116,12 @@ export default {
           icon: "mdi-frequently-asked-questions",
           link: { name: "FAQ" }
         }
+
         // {
         //   title: "Blog",
         //   icon: "mdi-boom-gate-down-outline",
         //   link: { name: "UnderConstruction" }
-        // },
+        // }
         // {
         //   title: "Library",
         //   icon: "mdi-boom-gate-down-outline",

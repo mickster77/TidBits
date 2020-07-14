@@ -11,7 +11,8 @@ import Burnlist from '@/views/Burnlist'
 import Letters from '@/views/Letters'
 import Weight from '@/views/Weight'
 import Workout from '@/views/Workout'
-
+import ChoreBoard from '@/views/chore/ChoreBoard'
+import viewChoreBoard from '@/views/chore/viewChoreBoard'
 import UnderConstruction from '@/views/UnderConstruction'
 import firebase from 'firebase'
 
@@ -21,6 +22,18 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/choreboard',
+      name: 'ChoreBoard',
+      component: ChoreBoard,
+      requiresAuth: true,
+    },
+    {
+      path: '/choreboard/:id',
+      name: 'viewChoreBoard',
+      component: viewChoreBoard,
+
+    },
     {
       path: '/workout',
       name: 'Workout',
@@ -95,6 +108,7 @@ const router = new Router({
       name: 'UnderConstruction',
       component: UnderConstruction,
     },
+
 
   ]
 })

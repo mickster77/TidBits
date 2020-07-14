@@ -24,7 +24,7 @@
           <v-flex xs12>
             <p>
               Don't have an account? Sign up
-              <a href="/signup">here</a>
+              <a @click="goSignup">here</a>
             </p>
           </v-flex>
         </v-layout>
@@ -89,6 +89,11 @@ export default {
       } else {
         this.feedback = "you need to complete the form";
       }
+    },
+    goSignup() {
+      this.$router.push({
+        name: "Signup"
+      });
     }
   }
 };
