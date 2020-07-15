@@ -102,6 +102,11 @@ export default {
           link: { name: "Workout" }
         },
         {
+          title: "100 A Day",
+          icon: "mdi-clipboard-list",
+          link: { path: "/tracker" }
+        },
+        {
           title: "ChoreBoard",
           icon: "mdi-android-debug-bridge",
           link: { name: "ChoreBoard" }

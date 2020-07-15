@@ -127,9 +127,21 @@ export default {
     this.$data._chart.update();
   },
   methods: {
-    createDataset(workout) {
+    createDataset(workout, index) {
       // createDataset(workout, index) {
       // console.log(index);
+      let colorString = [
+        "red",
+        "green",
+        "blue",
+        "cyan",
+        "orange",
+        "yellow",
+        "white",
+        "lightgreen",
+        "black",
+        "lightblue"
+      ];
       if (
         this.exercise == workout.exercise &&
         this.workoutDataSets.length < 3
@@ -137,7 +149,9 @@ export default {
         const myDataset = {
           label: workout.date,
           data: workout.weights,
-          borderColor: "red",
+          // borderColor: "green",
+          borderColor: colorString[index],
+
           pointBorderColor: "green",
           pointBackgroundColor: "#green",
           backgroundColor: "#000000",
