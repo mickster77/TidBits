@@ -11,7 +11,7 @@ import Burnlist from '@/views/Burnlist'
 import Letters from '@/views/Letters'
 import Weight from '@/views/Weight'
 import Workout from '@/views/Workout'
-import Tracker from '@/views/Tracker'
+import Habits from '@/views/Habits'
 import ChoreBoard from '@/views/chore/ChoreBoard'
 import viewChoreBoard from '@/views/chore/viewChoreBoard'
 import UnderConstruction from '@/views/UnderConstruction'
@@ -31,9 +31,9 @@ const router = new Router({
       requiresAuth: true,
     },
     {
-      path: '/tracker',
-      name: 'Tracker',
-      component: Tracker,
+      path: '/habits',
+      name: 'Habits',
+      component: Habits,
       requiresAuth: true,
     },
     {

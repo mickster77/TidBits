@@ -328,15 +328,23 @@ export default {
       return myDate;
     },
     currentWeight() {
-      let weightString = this.weights[0].weight;
-      return Number(weightString);
+      if (this.weights.length > 0) {
+        let weightString = this.weights[0].weight;
+        return Number(weightString);
+      } else {
+        return 0;
+      }
     },
     computedWeights() {
       let justWeights = [];
-      this.weights.forEach(element => {
-        justWeights.push(element.weight);
-      });
-      return justWeights.map(Number).reverse();
+      if (this.weights.length > 0) {
+        this.weights.forEach(element => {
+          justWeights.push(element.weight);
+        });
+        return justWeights.map(Number).reverse();
+      } else {
+        return justWeights;
+      }
     },
     computedDates() {
       let justDates = [];

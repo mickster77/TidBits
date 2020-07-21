@@ -27,7 +27,8 @@ export default new Vuetify({
         // warning: colors.blue,
       },
       dark: {
-        primary: "#27FB6B",
+
+        primary: colors.indigo,
         secondary: '#424242',
         accent: '#27FB6B',
         error: colors.red,

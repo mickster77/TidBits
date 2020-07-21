@@ -102,9 +102,9 @@ export default {
           link: { name: "Workout" }
         },
         {
-          title: "100 A Day",
+          title: "Habits",
           icon: "mdi-clipboard-list",
-          link: { path: "/tracker" }
+          link: { path: "/habits" }
         },
         {
           title: "ChoreBoard",

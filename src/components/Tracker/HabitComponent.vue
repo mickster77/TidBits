@@ -1,22 +1,49 @@
 <template>
   <v-card class="ma-4">
-    <v-card-title>{{name}}</v-card-title>
-    <v-card-subtitle>Date Started: {{reps[0].date}}</v-card-subtitle>
+    <v-card-subtitle class="text-left">Date Started: {{startDate}}</v-card-subtitle>
     <v-card-text align="center">
-      <h1>Total {{name}} Done Today:</h1>
+      <h1>{{name}} Today:</h1>
       <v-progress-circular indeterminate color="primary" v-if="loading"></v-progress-circular>
       <h1 v-else>{{todayReps}}</h1>
+      <div>
+        <v-btn class="mx-2" fab small color="primary" @click="add(1)">
+          <!-- <v-icon dark>mdi-plus</v-icon> -->
+          1+
+        </v-btn>
+        <v-btn class="mx-2" fab color="primary" @click="add(5)">5+</v-btn>
+        <v-btn class="mx-2" fab large color="primary" @click="add(10)">
+          <!-- <v-icon dark>mdi-plus</v-icon> -->
+          10+
+        </v-btn>
+      </div>
     </v-card-text>
     <v-card-actions>
-      <v-btn @click="add(1)">Add 1</v-btn>
-      <v-btn @click="add(5)">Add 5</v-btn>
-      <v-btn @click="add(10)">Add 10</v-btn>
-      <v-btn @click="showGraph=!showGraph">Show Graph</v-btn>
-      <v-btn @click="showTable=!showTable">Show Table</v-btn>
+      <!-- ****************** -->
+
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn v-bind="attrs" v-on="on" color="primary">Show:</v-btn>
+        </template>
+        <v-list>
+          <v-list-item @click="showGraph=!showGraph">
+            <v-list-item-title>Graph</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="showTable=!showTable">
+            <v-list-item-title>Table</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="showStats=!showStats">
+            <v-list-item-title>Stats</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <!-- ****************** -->
       <v-spacer></v-spacer>
       <v-btn @click="zeroReps()" color="error">Reset</v-btn>
     </v-card-actions>
+
+    <!-- showGraph -->
     <v-card-text v-if="showGraph">
+      <v-divider class="my-2"></v-divider>
       <line-chart
         :chartData="repsArray"
         :chartLabels="datesArray"
@@ -24,7 +51,10 @@
         label="Reps over time"
       />
     </v-card-text>
+
+    <!-- showTable -->
     <v-card-text v-if="showTable">
+      <v-divider class="my-2"></v-divider>
       <h1>Table</h1>
       <v-simple-table dense>
         <template v-slot:default>
@@ -36,17 +66,23 @@
             </tr>
           </thead>
           <tbody>
-            <!-- <tr v-for="item in desserts" :key="item.name"> -->
             <tr v-for="(item, index) in reps" :key="index">
-              <td>{{ item.date }}</td>
+              <td>{{item.date }}</td>
               <td>{{item.reps}}</td>
               <td class="text-right">
-                <v-icon @click="deleteDay(item.date)">mdi-delete</v-icon>
+                <v-icon @click="deleteDay(item.date)" color="error">mdi-delete</v-icon>
               </td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
+    </v-card-text>
+
+    <!-- showStats -->
+    <v-card-text v-if="showStats">
+      <v-divider class="my-2"></v-divider>
+      <h2>Stats</h2>
+      <h3>Total Reps: {{totalReps}}</h3>
     </v-card-text>
   </v-card>
 </template>
@@ -59,7 +95,8 @@ import LineChart from "@/components/Charts/LineChart";
 
 export default {
   props: {
-    name: String
+    name: String,
+    startDate: String
   },
   components: {
     LineChart
@@ -70,6 +107,10 @@ export default {
       loading: false,
       showGraph: false,
       showTable: false,
+      showStats: false,
+
+      Newreps: [],
+
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
@@ -134,9 +175,6 @@ export default {
           });
         });
         this.reps = allReps;
-      })
-      .then(() => {
-        this.loading = false;
       });
   },
   methods: {
@@ -197,15 +235,32 @@ export default {
   computed: {
     todayReps() {
       if (this.reps.length > 0) {
-        // get today's date
-        let todayDate = moment(Date.now()).format("YYYY-MM-DD");
-        // find the array index for today's date
-        let index = this.reps.map(e => e.date).indexOf(todayDate);
-        // get the corresponding reps
-        let myReps = this.reps[index].reps;
-
-        return myReps;
+        // if there are any entries, return the reps of the most recent entry
+        return this.reps[this.reps.length - 1].reps;
       } else {
+        // else, return zero
+        return 0;
+      }
+    },
+    // startDate() {
+    //   if (this.reps.length > 0) {
+    //     // if there are any entries, return the reps of the most recent entry
+    //     return this.reps[this.reps.length - 1].date;
+    //   } else {
+    //     // else, return zero
+    //     return "Get Going Already!";
+    //   }
+    // },
+    totalReps() {
+      if (this.reps.length > 0) {
+        // ensure there is an entry
+        let tReps = 0;
+        this.reps.forEach(object => {
+          tReps = tReps + object.reps;
+        });
+        return tReps;
+      } else {
+        // else, return zero
         return 0;
       }
     },
@@ -214,14 +269,14 @@ export default {
       this.reps.forEach(element => {
         justReps.push(element.reps);
       });
-      return justReps.map(Number).reverse();
+      return justReps.map(Number);
     },
     datesArray() {
       let justDates = [];
       this.reps.forEach(element => {
         justDates.push(element.date);
       });
-      return justDates.reverse();
+      return justDates;
     }
   }
 };

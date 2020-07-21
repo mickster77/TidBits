@@ -10,7 +10,7 @@
     "source": "functions"
   },
   "hosting": {
-    "site": "mickster",
+    "site": "tidbits-77",
     "public": "dist",
     "ignore": [
       "firebase.json",
