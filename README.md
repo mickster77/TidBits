@@ -1,4 +1,6 @@
-# Tidbits
+# TidBits
+
+## TidBits is a collection of Apps
 
 ## Project setup
 ```
