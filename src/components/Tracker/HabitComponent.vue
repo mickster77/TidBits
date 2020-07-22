@@ -182,14 +182,21 @@ export default {
       this.loading = true;
       let todayDate = moment(Date.now()).format("YYYY-MM-DD");
       let oldReps = 0;
+
+      // ***** This code checks if there is an existing doc with the id of "todayDate"
+      // ***** If there is not, is write a new doc with the data.
+      // Set document Reference
       var docRef = db
         .collection("UserShared")
         .doc(firebase.auth().currentUser.displayName)
         .collection(this.$props.name)
         .doc(todayDate);
+
+      // Get the doc
       docRef
         .get()
         .then(doc => {
+          // Check is the doc exists
           if (doc.exists) {
             oldReps = doc.data().reps;
             docRef
@@ -213,6 +220,8 @@ export default {
         .catch(function(error) {
           console.log("Error getting document:", error);
         });
+
+      // *****
     },
     zeroReps() {
       let todayDate = moment(Date.now()).format("YYYY-MM-DD");
@@ -235,8 +244,15 @@ export default {
   computed: {
     todayReps() {
       if (this.reps.length > 0) {
-        // if there are any entries, return the reps of the most recent entry
-        return this.reps[this.reps.length - 1].reps;
+        // there is an entry
+        let todayDate = moment(Date.now()).format("YYYY-MM-DD");
+        if (todayDate == this.reps[this.reps.length - 1].date) {
+          // reps are added for today
+          return this.reps[this.reps.length - 1].reps;
+        } else {
+          // no reps yet today
+          return 0;
+        }
       } else {
         // else, return zero
         return 0;

@@ -30,10 +30,10 @@
       </v-row>
     </v-container>
     <!-- add current weight   -->
-    <v-container secondary>
+    <v-container v-if="weighedIn">
       <v-row>
         <v-col>
-          <h1 class="text-center">Weigh In ({{currentWeight}})</h1>
+          <h1 class="text-center">Weigh In (last: {{currentWeight}})</h1>
           <v-row>
             <v-col cols="12">
               <Slider :baseWeight="currentWeight" />
@@ -48,7 +48,7 @@
         <v-col cols="12">
           <v-card>
             <v-card-title class="justify-center">
-              Add Past Weight
+              Add Weight
               <span>
                 <v-btn class="ml-4" @click="showCalendar=!showCalendar">Show</v-btn>
               </span>
@@ -75,29 +75,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- debug   -->
-    <v-container v-show="false">
-      <v-row>
-        <v-col>
-          <v-card>
-            <v-card-title>Debug</v-card-title>
-            <v-card-text v-show="showDebug">
-              <p>model = {{model}}</p>
-              <p>picker = {{picker}}</p>
-              <p>momentDater = {{momentDate}}</p>
 
-              <p>showCal = {{showCalendar}}</p>
-              <p>computedWeights = {{computedWeights}}</p>
-              <p>computedDates = {{computedDates}}</p>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="success" @click="showDebug=!showDebug">show</v-btn>
-              <v-btn color="success" @click="printWeights">print</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
     <!-- charts   -->
     <v-container>
       <v-row>
@@ -192,11 +170,6 @@ export default {
     LineChart,
     Slider
   },
-  //   watch: {
-  //     computedWeights() {
-  //       this.$data._chart.update();
-  //     }
-  //   },
   data() {
     return {
       weight: null,
@@ -219,12 +192,6 @@ export default {
       fill: false,
       type: "trend",
       autoLineWidth: false,
-
-      // Weight Slider
-      adjustWeight: 0,
-      step: 0.1,
-      min: -10,
-      max: 10,
 
       // chart
 
@@ -315,9 +282,6 @@ export default {
       });
   },
   computed: {
-    momentDate() {
-      return moment(this.picker).format("l");
-    },
     selectedDate() {
       let myDate = null;
       if (this.picker) {
@@ -400,6 +364,13 @@ export default {
         justDates.push(element.date);
       });
       return justDates.slice(0, 7).reverse();
+    },
+    weighedIn() {
+      if (this.weights.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   methods: {
@@ -424,6 +395,7 @@ export default {
     addWeight() {
       let uid = this.$store.getters.uid;
       this.picker = moment(Date.now()).format("YYYY-MM-DD");
+
       if (this.weight !== "") {
         db.collection("UserOwned")
           .doc(uid)

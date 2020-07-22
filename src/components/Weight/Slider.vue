@@ -1,9 +1,10 @@
 <template>
   <v-card flat>
     <v-card-title class="justify-center">Add New Weight</v-card-title>
-    <!-- <v-card-text>{{baseWeight}}</v-card-text>
-    <v-card-text>{{adjustWeight}}</v-card-text>-->
-    <v-card-text class="display-4 text-center">{{newWeight}}</v-card-text>
+    <v-card-text v-if="loading" class="display-4 text-center">
+      <v-progress-circular class indeterminate color="accent"></v-progress-circular>
+    </v-card-text>
+    <v-card-text class="display-4 text-center" v-else>{{newWeight}}</v-card-text>
     <v-slider
       v-model="adjustWeight"
       :step="step"
@@ -37,7 +38,8 @@ export default {
       step: 0.1,
       min: -10,
       max: 10,
-      feedback: null
+      feedback: null,
+      loading: false
     };
   },
   methods: {
@@ -53,6 +55,7 @@ export default {
       let uid = this.$store.getters.uid;
 
       if (this.newWeight !== "") {
+        this.loading = true;
         db.collection("UserOwned")
           .doc(uid)
           .collection("Weight")
@@ -65,6 +68,7 @@ export default {
           .then(() => {
             this.adjustWeight = 0;
             this.feedback = "Weight Saved!";
+            this.loading = false;
           })
           .catch(error => {
             alert(error);
