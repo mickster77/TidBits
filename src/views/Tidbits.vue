@@ -7,7 +7,7 @@
             <v-card-title class="display-2">TidBits</v-card-title>
             <v-card-subtitle
               class="headline"
-            >The TidBits app is a way to annote small blurbs of information, called TidBits. TidBits typically have a source, such as a book, podcast or even passing conversation. TidBits also can be tagged, which allows looking over all TidBits related to a certain topic.</v-card-subtitle>
+            >The TidBits app (thisis a test) is a way to annote small blurbs of information, called TidBits. TidBits typically have a source, such as a book, podcast or even passing conversation. TidBits also can be tagged, which allows looking over all TidBits related to a certain topic.</v-card-subtitle>
             <v-card-subtitle
               class="headline"
             >Use the plus button in the corner to create a new Tidbits. The other controls below allow selective viewing of TidBits.</v-card-subtitle>

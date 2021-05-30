@@ -6,7 +6,7 @@
       <v-card-title primary-title class="justify-center display-1">{{name}}</v-card-title>
       <v-list v-for="(item, key) in items" :key="key">
         <!-- if completed -->
-        <v-list-item v-if="item.completed">
+        <v-list-item v-if="item.onList">
           <v-btn icon @click="markIncomplete(item.id)">
             <v-icon color="green">mdi-checkbox-marked-outline</v-icon>
           </v-btn>

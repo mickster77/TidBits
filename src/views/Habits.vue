@@ -34,9 +34,9 @@
 
 <script>
 import moment from "moment";
-import db from "@/firebase/init"; //needed for database call
+import db from "@/firebase/init"; //needed for database calls
 import firebase from "firebase"; // needed for user auth
-import HabitComponent from "@/components/Tracker/HabitComponent.vue";
+import HabitComponent from "@/components/Habit/HabitComponent.vue";
 
 export default {
   name: "Habits",
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       newHabit: null,
-      habits: []
+      habits: [],
     };
   },
   async created() {
@@ -53,13 +53,13 @@ export default {
     db.collection("UserShared")
       .doc(firebase.auth().currentUser.displayName)
       .collection("Habits")
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         newHabits = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           newHabits.push({
             name: doc.data().name,
             id: doc.id,
-            startDate: doc.data().startDate
+            startDate: doc.data().startDate,
           });
         });
         this.habits = newHabits;
@@ -82,7 +82,7 @@ export default {
           .collection("Habits")
           .doc(this.newHabit);
 
-        docRef.get().then(doc => {
+        docRef.get().then((doc) => {
           if (doc.exists) {
             alert("you already have a habit for that...");
           } else {
@@ -90,12 +90,12 @@ export default {
               .set({
                 name: this.newHabit,
                 created_at: Date.now(),
-                startDate: moment(Date.now()).format("YYYY-MM-DD")
+                startDate: moment(Date.now()).format("YYYY-MM-DD"),
               })
               .then(() => {
                 this.newHabit = null;
               })
-              .catch(error => {
+              .catch((error) => {
                 alert(error);
               });
           }
@@ -103,9 +103,9 @@ export default {
       } else {
         alert("Please enter a habit");
       }
-    }
+    },
   },
-  computed: {}
+  computed: {},
 };
 </script>
 

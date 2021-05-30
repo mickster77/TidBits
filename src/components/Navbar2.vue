@@ -5,7 +5,7 @@
         <v-list-item-avatar>
           <v-img v-if="user" :src="imgURL"></v-img>
         </v-list-item-avatar>
-        <v-list-item-title>{{displayName}}</v-list-item-title>
+        <v-list-item-title>{{ displayName }}</v-list-item-title>
         <!-- <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>-->
@@ -17,7 +17,7 @@
         <v-list-item
           v-for="item in items"
           :key="item.title"
-          @click="drawer=!drawer"
+          @click="drawer = !drawer"
           link
           router
           :to="item.link"
@@ -35,10 +35,10 @@
       <!-- Sign in links -->
 
       <v-list v-if="!user">
-        <v-list-item :to="{path: '/login'}">
+        <v-list-item :to="{ path: '/login' }">
           <v-list-item-content>Sign in</v-list-item-content>
         </v-list-item>
-        <v-list-item :to="{path: '/signup'}">
+        <v-list-item :to="{ path: '/signup' }">
           <v-list-item-content>Sign up</v-list-item-content>
         </v-list-item>
       </v-list>
@@ -79,12 +79,12 @@ export default {
         {
           title: "TidBits",
           icon: "mdi-home-city",
-          link: { name: "Tidbits", params: { uid: this.getUID() } }
+          link: { name: "Tidbits", params: { uid: this.getUID() } },
         },
         {
           title: "ToDo",
           icon: "mdi-clipboard-check-multiple",
-          link: { name: "ToDo", params: { uid: this.getUID() } }
+          link: { name: "ToDo", params: { uid: this.getUID() } },
         },
         // {
         //   title: "Test",
@@ -94,33 +94,38 @@ export default {
         {
           title: "Weight",
           icon: "mdi-scale",
-          link: { name: "Weight" }
+          link: { name: "Weight" },
         },
         {
           title: "Workout",
           icon: "mdi-weight-lifter",
-          link: { name: "Workout" }
+          link: { name: "Workout" },
         },
         {
           title: "Habits",
           icon: "mdi-clipboard-list",
-          link: { path: "/habits" }
+          link: { path: "/habits" },
         },
         {
           title: "ChoreBoard",
           icon: "mdi-android-debug-bridge",
-          link: { name: "ChoreBoard" }
+          link: { name: "ChoreBoard" },
         },
         {
           title: "Letters",
           icon: "mdi-book-multiple",
-          link: { name: "Letters" }
+          link: { name: "Letters" },
         },
         {
           title: "FAQ",
           icon: "mdi-frequently-asked-questions",
-          link: { name: "FAQ" }
-        }
+          link: { name: "FAQ" },
+        },
+        {
+          title: "Shopping List",
+          icon: "mdi-boom-gate-down-outline",
+          link: { name: "ShoppingList" },
+        },
 
         // {
         //   title: "Blog",
@@ -148,15 +153,15 @@ export default {
           icon: "mdi_exit_to_app",
           text: "Login",
           route: "/login",
-          show: !this.user
+          show: !this.user,
         },
         {
           icon: "exit_to_app",
           text: "Signup",
           route: "/signup",
-          show: !this.user
-        }
-      ]
+          show: !this.user,
+        },
+      ],
     };
   },
   methods: {
@@ -171,7 +176,7 @@ export default {
         .signOut()
         .then(() => {
           this.$router.replace({
-            name: "Login"
+            name: "Login",
           });
         });
       // console.log("logout");
@@ -195,15 +200,15 @@ export default {
       var pathReference = storage.ref(path);
       pathReference
         .getDownloadURL()
-        .then(url => {
+        .then((url) => {
           this.imgURL = url;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.warn(error);
           console.log(error.code);
           // storage/object-not-found
         });
-    }
+    },
   },
   computed: {
     displayName() {
@@ -217,7 +222,7 @@ export default {
       } else {
         return "no user";
       }
-    }
+    },
     // user() {
     //   if (this.$store.state.user) {
     //     return this.$store.state.user;
@@ -229,7 +234,7 @@ export default {
   created() {
     this.user = firebase.auth().currentUser;
     // this fires everytime there is a change in user status
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.user = user;
         this.updateProfilePic();
@@ -237,7 +242,7 @@ export default {
         this.user = null;
       }
     });
-  }
+  },
 };
 </script>
 

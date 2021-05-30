@@ -15,6 +15,8 @@ import Habits from '@/views/Habits'
 import ChoreBoard from '@/views/chore/ChoreBoard'
 import viewChoreBoard from '@/views/chore/viewChoreBoard'
 import UnderConstruction from '@/views/UnderConstruction'
+import ShoppingList from '@/views/ShoppingList'
+
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -115,6 +117,11 @@ const router = new Router({
       path: '/underconstruction',
       name: 'UnderConstruction',
       component: UnderConstruction,
+    },
+    {
+      path: '/shoppinglist',
+      name: 'ShoppingList',
+      component: ShoppingList,
     },
 
 
