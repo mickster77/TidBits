@@ -104,6 +104,14 @@
         </v-col>
         <v-col xs="12" md="6">
           <line-chart
+            :chartData="computedChartDataTwoWeek"
+            :chartLabels="computedChartLabelsTwoWeek"
+            :options="chartDaysOptions"
+            label="Last 14 Measurements"
+          />
+        </v-col>
+        <v-col xs="12">
+          <line-chart
             :chartData="computedChartDataMonth"
             :chartLabels="computedChartLabelsMonth"
             :options="chartMonthOptions"
@@ -364,6 +372,21 @@ export default {
       });
       return justDates.slice(0, 7).reverse();
     },
+    // computed data for Two Weeks
+    computedChartDataTwoWeek() {
+      let justWeights = [];
+      this.weights.forEach((element) => {
+        justWeights.push(element.weight);
+      });
+      return justWeights.map(Number).slice(0, 14).reverse();
+    },
+    computedChartLabelsTwoWeek() {
+      let justDates = [];
+      this.weights.forEach((element) => {
+        justDates.push(element.date);
+      });
+      return justDates.slice(0, 14).reverse();
+    },
     weighedIn() {
       if (this.weights.length > 0) {
         return true;
@@ -389,7 +412,7 @@ export default {
 
     addWeight() {
       let uid = this.$store.getters.uid;
-      this.picker = moment(Date.now()).format("YYYY-MM-DD");
+      // this.picker = moment(Date.now()).format("YYYY-MM-DD");
 
       if (this.weight !== "") {
         db.collection("UserOwned")
