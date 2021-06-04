@@ -33,6 +33,11 @@ const router = new Router({
       requiresAuth: true,
     },
     {
+      path: '/shoppinglist',
+      name: 'ShoppingList',
+      component: ShoppingList,
+    },
+    {
       path: '/habits',
       name: 'Habits',
       component: Habits,
@@ -118,11 +123,7 @@ const router = new Router({
       name: 'UnderConstruction',
       component: UnderConstruction,
     },
-    {
-      path: '/shoppinglist',
-      name: 'ShoppingList',
-      component: ShoppingList,
-    },
+
 
 
   ]

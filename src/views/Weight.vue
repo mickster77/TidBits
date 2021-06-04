@@ -5,7 +5,9 @@
       <v-row justify-center>
         <v-col>
           <v-card>
-            <v-card-title primary-title class="justify-center display-3">Weight App</v-card-title>
+            <v-card-title primary-title class="justify-center display-3"
+              >Weight App</v-card-title
+            >
             <v-container fluid>
               <v-row>
                 <v-col>
@@ -33,7 +35,7 @@
     <v-container v-if="weighedIn">
       <v-row>
         <v-col>
-          <h1 class="text-center">Weigh In (last: {{currentWeight}})</h1>
+          <h1 class="text-center">Weigh In (last: {{ currentWeight }})</h1>
           <v-row>
             <v-col cols="12">
               <Slider :baseWeight="currentWeight" />
@@ -50,7 +52,9 @@
             <v-card-title class="justify-center">
               Add Weight
               <span>
-                <v-btn class="ml-4" @click="showCalendar=!showCalendar">Show</v-btn>
+                <v-btn class="ml-4" @click="showCalendar = !showCalendar"
+                  >Show</v-btn
+                >
               </span>
             </v-card-title>
             <v-container v-show="showCalendar">
@@ -61,10 +65,11 @@
                     append-outer-icon="mdi-plus"
                     @click:append-outer="addWeight"
                     @keydown.enter="addWeight"
-                    @click:prepend="showCalendar=!showCalendar"
+                    @click:prepend="showCalendar = !showCalendar"
                     label="add weight"
                     prepend-icon="mdi-calendar"
-                  >Test</v-text-field>
+                    >Test</v-text-field
+                  >
                 </v-col>
                 <v-col xs="12" md="6">
                   <v-date-picker v-model="picker"></v-date-picker>
@@ -80,10 +85,10 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-btn @click="showChart=!showChart">Show Graphs</v-btn>
+          <v-btn @click="showChart = !showChart">Show Graphs</v-btn>
         </v-col>
         <v-col>
-          <v-btn @click="showData=!showData">Show Data</v-btn>
+          <v-btn @click="showData = !showData">Show Data</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -91,18 +96,18 @@
       <v-row v-if="showChart">
         <v-col xs="12" md="6">
           <line-chart
-            :chartData="computedChartDataMonth"
-            :chartLabels="computedChartLabelsMonth"
-            :options="chartMonthOptions"
-            label="Last 30 Measurements"
-          />
-        </v-col>
-        <v-col xs="12" md="6">
-          <line-chart
             :chartData="computedChartDataWeek"
             :chartLabels="computedChartLabelsWeek"
             :options="chartDaysOptions"
             label="Last 7 Measurements"
+          />
+        </v-col>
+        <v-col xs="12" md="6">
+          <line-chart
+            :chartData="computedChartDataMonth"
+            :chartLabels="computedChartLabelsMonth"
+            :options="chartMonthOptions"
+            label="Last 30 Measurements"
           />
         </v-col>
       </v-row>
@@ -161,14 +166,14 @@ const gradients = [
   ["red", "orange", "yellow"],
   ["purple", "violet"],
   ["#00c6ff", "#F0F", "#FF0"],
-  ["#f72047", "#ffd200", "#1feaea"]
+  ["#f72047", "#ffd200", "#1feaea"],
 ];
 
 export default {
   name: "Weight",
   components: {
     LineChart,
-    Slider
+    Slider,
   },
   data() {
     return {
@@ -203,17 +208,17 @@ export default {
             {
               type: "time",
               time: {
-                unit: "month"
-              }
-            }
-          ]
+                unit: "month",
+              },
+            },
+          ],
         },
         legend: {
           labels: {
             // This more specific font property overrides the global property
-            fontColor: "#FFFFFF"
-          }
-        }
+            fontColor: "#FFFFFF",
+          },
+        },
       },
       chartMonthOptions: {
         responsive: true,
@@ -223,17 +228,17 @@ export default {
             {
               type: "time",
               time: {
-                unit: "week"
-              }
-            }
-          ]
+                unit: "week",
+              },
+            },
+          ],
         },
         legend: {
           labels: {
             // This more specific font property overrides the global property
-            fontColor: "#FFFFFF"
-          }
-        }
+            fontColor: "#FFFFFF",
+          },
+        },
       },
       chartDaysOptions: {
         responsive: true,
@@ -243,20 +248,20 @@ export default {
             {
               type: "time",
               time: {
-                unit: "day"
-              }
-            }
-          ]
+                unit: "day",
+              },
+            },
+          ],
         },
         legend: {
           labels: {
             // This more specific font property overrides the global property
-            fontColor: "#FFFFFF"
-          }
-        }
+            fontColor: "#FFFFFF",
+          },
+        },
       },
       showChart: false,
-      showData: false
+      showData: false,
     };
   },
 
@@ -269,13 +274,13 @@ export default {
       .orderBy("date", "desc")
       //   .orderBy("date")
 
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         newWeights = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           newWeights.push({
             weight: doc.data().weight,
             id: doc.id,
-            date: doc.data().date
+            date: doc.data().date,
           });
         });
         this.weights = newWeights;
@@ -302,7 +307,7 @@ export default {
     computedWeights() {
       let justWeights = [];
       if (this.weights.length > 0) {
-        this.weights.forEach(element => {
+        this.weights.forEach((element) => {
           justWeights.push(element.weight);
         });
         return justWeights.map(Number).reverse();
@@ -312,55 +317,49 @@ export default {
     },
     computedDates() {
       let justDates = [];
-      this.weights.forEach(element => {
+      this.weights.forEach((element) => {
         justDates.push(element.date);
       });
       return justDates.reverse();
     },
     computedChartData() {
       let justWeights = [];
-      this.weights.forEach(element => {
+      this.weights.forEach((element) => {
         justWeights.push(element.weight);
       });
       return justWeights.map(Number);
     },
     computedChartLabels() {
       let justDates = [];
-      this.weights.forEach(element => {
+      this.weights.forEach((element) => {
         justDates.push(element.date);
       });
       return justDates;
     },
     computedChartDataMonth() {
       let justWeights = [];
-      this.weights.forEach(element => {
+      this.weights.forEach((element) => {
         justWeights.push(element.weight);
       });
-      return justWeights
-        .map(Number)
-        .slice(0, 30)
-        .reverse();
+      return justWeights.map(Number).slice(0, 30).reverse();
     },
     computedChartLabelsMonth() {
       let justDates = [];
-      this.weights.forEach(element => {
+      this.weights.forEach((element) => {
         justDates.push(element.date);
       });
       return justDates.slice(0, 30).reverse();
     },
     computedChartDataWeek() {
       let justWeights = [];
-      this.weights.forEach(element => {
+      this.weights.forEach((element) => {
         justWeights.push(element.weight);
       });
-      return justWeights
-        .map(Number)
-        .slice(0, 7)
-        .reverse();
+      return justWeights.map(Number).slice(0, 7).reverse();
     },
     computedChartLabelsWeek() {
       let justDates = [];
-      this.weights.forEach(element => {
+      this.weights.forEach((element) => {
         justDates.push(element.date);
       });
       return justDates.slice(0, 7).reverse();
@@ -371,7 +370,7 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
   methods: {
     sendMessage() {
@@ -382,13 +381,9 @@ export default {
 
     nextDate() {
       if (this.picker) {
-        this.picker = moment(this.picker)
-          .add(1, "days")
-          .format("YYYY-MM-DD");
+        this.picker = moment(this.picker).add(1, "days").format("YYYY-MM-DD");
       } else {
-        this.picker = moment(Date.now())
-          .add(1, "days")
-          .format("YYYY-MM-DD");
+        this.picker = moment(Date.now()).add(1, "days").format("YYYY-MM-DD");
       }
     },
 
@@ -403,7 +398,7 @@ export default {
           .add({
             weight: this.weight,
             created_at: Date.now(),
-            date: this.selectedDate
+            date: this.selectedDate,
           })
           .then(
             ((this.weight = null),
@@ -411,7 +406,7 @@ export default {
               .add(1, "days")
               .format("YYYY-MM-DD")))
           )
-          .catch(error => {
+          .catch((error) => {
             alert(error);
           });
       } else {
@@ -430,8 +425,8 @@ export default {
       console.log(this.computedWeights);
       console.log(this.computedDates);
       this.showChart = !this.showChart;
-    }
-  }
+    },
+  },
 };
 </script>
 

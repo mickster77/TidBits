@@ -102,6 +102,11 @@ export default {
           link: { name: "Workout" },
         },
         {
+          title: "Shopping List",
+          icon: "mdi-clipboard-list",
+          link: { name: "ShoppingList" },
+        },
+        {
           title: "Habits",
           icon: "mdi-clipboard-list",
           link: { path: "/habits" },
@@ -120,11 +125,6 @@ export default {
           title: "FAQ",
           icon: "mdi-frequently-asked-questions",
           link: { name: "FAQ" },
-        },
-        {
-          title: "Shopping List",
-          icon: "mdi-boom-gate-down-outline",
-          link: { name: "ShoppingList" },
         },
 
         // {

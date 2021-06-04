@@ -14,14 +14,28 @@
       </v-btn>
       <v-col cols="12">
         <v-card class="ma-1 pa-1">
+          <v-btn color="primary" @click="$vuetify.goTo('#shelf')">Shelf</v-btn>
+        </v-card>
+        <v-card class="ma-1 pa-1">
           <v-card-title>List:</v-card-title>
+          <v-btn
+            v-for="(type, index) in types"
+            :key="'btn' + index"
+            color="primary"
+            class="ma-1"
+            v-show="anyItems(type)"
+            @click="$vuetify.goTo('#' + type)"
+            >{{ type }}</v-btn
+          >
           <!-- this card is repeated for each type -->
+
           <v-card
             color="grey darken-4"
             class="ma-1 pa-1"
             v-for="(type, index) in types"
-            :key="index"
+            :key="'list-type' + index"
             v-show="anyItems(type)"
+            :id="type"
           >
             <v-card-title class="justify-center"> {{ type }} </v-card-title>
 
@@ -48,18 +62,19 @@
               </div>
             </div>
           </v-card>
-          <v-card>
+
+          <v-card color="grey darken-4" class="ma-1 pa-1">
             <v-card-title>Add random item to list</v-card-title>
-            <v-row>
-              <v-col lg="4" md="6" sm="12" xs12>
+            <v-row class="mx-3">
+              <v-col cols="12" lg="4" md="6">
                 <v-text-field
                   v-model="newItemforList"
                   label="name"
                   @keydown.enter="addItemToList"
                 ></v-text-field>
               </v-col>
-              <v-col lg="4" md="6" sm="12" xs12>
-                <v-btn @click="addItemToList">Add</v-btn>
+              <v-col cols="12" lg="4" md="6">
+                <v-btn color="primary" @click="addItemToList">Add</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -77,13 +92,22 @@
 
         <!-- Shelf Card!! -->
 
-        <v-card class="ma-1 pa-1">
+        <v-card class="ma-1 pa-1" id="shelf">
           <v-card-title>Shelf:</v-card-title>
+          <v-btn
+            v-for="(type, index) in types"
+            :key="'btn-shelf' + index"
+            color="primary"
+            class="ma-1"
+            @click="$vuetify.goTo('#shelf' + type)"
+            >{{ type }}</v-btn
+          >
           <v-card
             color="grey darken-4"
             class="ma-1 pa-1"
             v-for="(type, index) in types"
-            :key="index"
+            :key="'shelf' + index"
+            :id="'shelf' + type"
           >
             <v-card-title class="justify-center"> {{ type }} </v-card-title>
 
@@ -101,7 +125,7 @@
               </div>
             </div>
           </v-card>
-          <v-card>
+          <v-card color="grey darken-4" class="ma-1 pa-1">
             <v-card-title>Add item to shelf</v-card-title>
             <v-row>
               <v-col lg="4" md="6" sm="12" xs12>
@@ -111,22 +135,22 @@
                   @keydown.enter="addToShelf"
                 ></v-text-field>
               </v-col>
-              <v-col lg="4" md="6" sm="12" xs12>
+              <v-col cols="12" lg="4" md="6">
                 <v-select
                   :items="types"
                   label="Standard"
                   v-model="newItemType"
                 ></v-select>
               </v-col>
-              <v-col lg="4" md="6" sm="12" xs12>
-                <v-btn @click="addToShelf">Add</v-btn>
+              <v-col cols="12" lg="4" md="6">
+                <v-btn color="primary" @click="addToShelf">Add</v-btn>
               </v-col>
             </v-row>
           </v-card>
         </v-card>
       </v-col>
     </v-row>
-    <v-card>
+    <v-card v-show="false">
       <h1>Burnlist</h1>
       <ul>
         <li>detele shelf item - done</li>
@@ -153,14 +177,16 @@ export default {
         "Meat",
         "Seafood",
         "Deli",
-        "Condiments and Spices",
+        "Condiments-Spices",
         "Dairy",
-        "Canned Goods",
+        "Canned-Goods",
         "Pasta",
         "Grains",
         "Frozen",
         "Beverages",
         "Household",
+        "Costco",
+        "Trader Joes",
         "Other",
       ],
       //for adding foods to shelf
@@ -168,6 +194,8 @@ export default {
       newItemType: null,
       // for adding item to list
       newItemforList: null,
+      // for scroll targets
+      scrollName: "Mike",
     };
   },
   async created() {
@@ -323,10 +351,19 @@ export default {
         return false;
       }
     },
+    goToScrollTarget(name) {
+      this.scrollName = name.replace(/\s/g, "");
+      this.$vuetify.goTo(this.target);
+    },
   },
   computed: {
     topTarget() {
       return screenTop;
+    },
+    target() {
+      // for v-scroll
+      // alert(this.scrollName);
+      return "#" + this.scrollName;
     },
   },
 };

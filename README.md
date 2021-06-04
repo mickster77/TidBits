@@ -40,6 +40,7 @@ firebase init
 
 ### firebase deploy
 firebase deploy --only hosting:tidbits-77
+if you try to deply eveything you'll have an issue with the blaze plan
 
 ### firebase cloud functions
 To deploy on could functions:
