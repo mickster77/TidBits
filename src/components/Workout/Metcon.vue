@@ -1,17 +1,17 @@
 <template>
   <div>
-    <!-- <div>
-      <WorkoutLineChart v-if="loaded" :workouts="metconWorkouts" exercise="Bench Press" />
-    </div>
-    <div>
-      <WorkoutLineChart v-if="loaded" :workouts="metconWorkouts" exercise="Squat" />
-    </div>
-    <div>
-      <WorkoutLineChart v-if="loaded" :workouts="metconWorkouts" exercise="Press" />
-    </div>
-    <div>
-      <WorkoutLineChart v-if="loaded" :workouts="metconWorkouts" exercise="Deadlift" />
-    </div>-->
+    <v-card>
+      <v-card-title>Log Workout</v-card-title>
+      <v-card-text>
+        <v-text-field label="Title" v-model="Title"></v-text-field>
+        <v-text-field label="Description" v-model="Description"></v-text-field>
+        <v-text-field label="Score" v-model="Score"></v-text-field>
+        <v-textarea label="Notes" v-model="Notes"></v-textarea>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary">Submit</v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
@@ -26,8 +26,11 @@ export default {
   },
   data() {
     return {
-      metconWorkouts: null,
-      loaded: false
+      Title: null,
+      Description: null,
+      Score: null,
+      Notes: null,
+      workouts: null,
     };
   },
   created() {
@@ -38,9 +41,9 @@ export default {
       .collection("Workout")
       .orderBy("date", "desc")
       .where("type", "==", "7x3")
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         newWorkouts = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           newWorkouts.push({
             title: doc.data().title,
             exercise: doc.data().exercise,
@@ -50,15 +53,15 @@ export default {
             weights: doc.data().weights,
             notes: doc.data().notes,
             date: doc.data().date,
-            id: doc.id
+            id: doc.id,
           });
         });
-        this.metconWorkouts = newWorkouts;
+        this.workouts = newWorkouts;
       });
   },
   beforeMount() {
     this.loaded = true;
-  }
+  },
 };
 </script>
 

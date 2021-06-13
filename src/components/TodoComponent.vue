@@ -3,14 +3,16 @@
   <!-- <v-row no-gutters> -->
   <v-col cols="12">
     <v-card class="mx-auto">
-      <v-card-title primary-title class="justify-center display-1">{{name}}</v-card-title>
+      <v-card-title primary-title class="justify-center display-1">{{
+        name
+      }}</v-card-title>
       <v-list v-for="(item, key) in items" :key="key">
         <!-- if completed -->
-        <v-list-item v-if="item.onList">
+        <v-list-item v-if="item.completed">
           <v-btn icon @click="markIncomplete(item.id)">
             <v-icon color="green">mdi-checkbox-marked-outline</v-icon>
           </v-btn>
-          <span class="completed">{{item.title}}</span>
+          <span class="completed">{{ item.title }}</span>
           <v-spacer></v-spacer>
           <v-btn icon @click="deleteItem(item.id)">
             <v-icon color="red">mdi-trash-can-outline</v-icon>
@@ -24,7 +26,7 @@
           <v-btn icon @click="markComplete(item.id)">
             <v-icon color="green">mdi-checkbox-blank-outline</v-icon>
           </v-btn>
-          <span>{{item.title}}</span>
+          <span>{{ item.title }}</span>
           <v-spacer></v-spacer>
           <v-btn icon @click="showItemDetail(item.id)">
             <v-icon color="green">mdi-information-outline</v-icon>
@@ -39,7 +41,12 @@
 
       <v-list>
         <v-list-item>
-          <v-text-field label="New Todo" type="text" v-model="myTodo" @keyup.enter="addToDo"></v-text-field>
+          <v-text-field
+            label="New Todo"
+            type="text"
+            v-model="myTodo"
+            @keyup.enter="addToDo"
+          ></v-text-field>
           <!-- <v-spacer></v-spacer> -->
           <v-btn icon @click="addToDo" dense>
             <v-icon color="green">mdi-plus</v-icon>
@@ -55,7 +62,7 @@
           </template>
           <v-list>
             <v-list-item>
-              <v-btn @click="dialog=true">Delete</v-btn>
+              <v-btn @click="dialog = true">Delete</v-btn>
             </v-list-item>
             <v-list-item>
               <v-btn @click="movetoEnd">Move to End</v-btn>
@@ -75,7 +82,7 @@
           <v-card-title>Delete the list?</v-card-title>
           <v-card-actions>
             <v-btn @click.stop="deleteList">Yes</v-btn>
-            <v-btn @click.stop="dialog=false">No</v-btn>
+            <v-btn @click.stop="dialog = false">No</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -85,10 +92,10 @@
       <v-dialog v-model="todoDialog" max-width="600px">
         <v-card>
           <v-card-title>Todo Details</v-card-title>
-          <v-card-text>{{itemDetail.title}}</v-card-text>
-          <v-card-text>{{itemDetail.body}}</v-card-text>
+          <v-card-text>{{ itemDetail.title }}</v-card-text>
+          <v-card-text>{{ itemDetail.body }}</v-card-text>
 
-          <v-btn @click.stop="todoDialog=false">Close</v-btn>
+          <v-btn @click.stop="todoDialog = false">Close</v-btn>
         </v-card>
       </v-dialog>
       <!-- todo detail dialog popup -->
@@ -121,13 +128,13 @@ export default {
       menuItems: [
         { title: "Delete", action: "dialog=true" },
         { title: "Manage", action: "deleteList" },
-        { title: "Move to End", action: "deleteList" }
+        { title: "Move to End", action: "deleteList" },
       ],
-      options: { duration: 50, offset: 5, easing: "linear" }
+      options: { duration: 50, offset: 5, easing: "linear" },
     };
   },
 
-  created: function() {
+  created: function () {
     this.items = [];
     let newItems = [];
     db.collection("UserOwned")
@@ -136,14 +143,14 @@ export default {
       .doc(this.$props.name)
       .collection("items")
       .orderBy("created_at")
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         newItems = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           newItems.push({
             id: doc.id,
             title: doc.data().title,
             body: doc.data().body,
-            completed: doc.data().completed
+            completed: doc.data().completed,
           });
         });
         this.items = newItems;
@@ -161,14 +168,14 @@ export default {
           .collection("items")
           .add({
             title: this.myTodo,
-            created_at: Date.now()
+            created_at: Date.now(),
           })
-          .then(response => {
+          .then((response) => {
             if (response) {
               this.myTodo = "";
             }
           })
-          .catch(error => {
+          .catch((error) => {
             this.errors = error;
           });
       } else {
@@ -182,16 +189,16 @@ export default {
         .collection("ToDos")
         .doc(id)
         .delete()
-        .then(function() {
+        .then(function () {
           // console.log("Document successfully deleted");
         })
-        .catch(function(error) {
+        .catch(function (error) {
           this.error = error;
         });
 
       this.dialog = false;
     },
-    deleteItem: function(id) {
+    deleteItem: function (id) {
       if (id) {
         db.collection("UserOwned")
           .doc(firebase.auth().currentUser.uid)
@@ -200,10 +207,10 @@ export default {
           .collection("items")
           .doc(id)
           .delete()
-          .then(function() {
+          .then(function () {
             // console.log("Document successfully deleted");
           })
-          .catch(function(error) {
+          .catch(function (error) {
             this.error = error;
           });
       } else {
@@ -211,7 +218,7 @@ export default {
       }
     },
 
-    showItemDetail: function(id) {
+    showItemDetail: function (id) {
       alert(id);
       // console.log(id);
       // this.detailID = id;
@@ -244,7 +251,7 @@ export default {
       //   });
     },
 
-    markComplete: function(id) {
+    markComplete: function (id) {
       db.collection("UserOwned")
         .doc(firebase.auth().currentUser.uid)
         .collection("ToDos")
@@ -253,12 +260,12 @@ export default {
         .doc(id)
         .set(
           {
-            completed: true
+            completed: true,
           },
           { merge: true }
         );
     },
-    markIncomplete: function(id) {
+    markIncomplete: function (id) {
       db.collection("UserOwned")
         .doc(firebase.auth().currentUser.uid)
         .collection("ToDos")
@@ -267,7 +274,7 @@ export default {
         .doc(id)
         .set(
           {
-            completed: false
+            completed: false,
           },
           { merge: true }
         );
@@ -286,19 +293,17 @@ export default {
         .collection("ToDos")
         .doc(name)
         .delete()
-        .then(function() {
-          db.collection("todos")
-            .doc(name)
-            .set({
-              title: name,
-              created_at: Date.now()
-            });
+        .then(function () {
+          db.collection("todos").doc(name).set({
+            title: name,
+            created_at: Date.now(),
+          });
         });
-    }
+    },
   },
 
   computed: {},
-  mounted() {}
+  mounted() {},
 };
 </script>
 
